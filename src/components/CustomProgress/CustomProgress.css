@@ -1,0 +1,53 @@
+.CustomProgress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.CustomProgress--friend * {
+  color: var(--custom_progress) !important;
+}
+
+.CustomProgress--friend .Progress__in {
+  background: var(--custom_progress) !important;
+}
+
+.CustomProgress__progressValue {
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.CustomProgress__progressWrap {
+  width: 100%;
+}
+
+.CustomProgress__progressLine {
+  width: 100%;
+  border-radius: 10px;
+  height: 32px;
+  overflow: hidden;
+}
+
+.CustomProgress__columns {
+  margin-top: 24px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.CustomProgress__column {
+  width: 100%;
+}
+
+.CustomProgress__column:first-child {
+  color: var(--accent);
+}
+
+.CustomProgress__column:last-child {
+  color: var(--custom_progress);
+}
+
+.CustomProgress__timer {
+  margin-top: 6px;
+}

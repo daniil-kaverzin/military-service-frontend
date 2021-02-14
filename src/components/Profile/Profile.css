@@ -1,0 +1,9 @@
+.Profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Profile__name {
+  margin-top: 12px;
+}

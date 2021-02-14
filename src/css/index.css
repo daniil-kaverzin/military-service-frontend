@@ -1,0 +1,7 @@
+:root {
+  --custom_progress: #818c99;
+}
+
+body[scheme='space_gray'] {
+  --custom_progress: #e1e3e6;
+}
