@@ -1,3 +1,5 @@
+import 'core-js/features/map';
+import 'core-js/features/set';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
