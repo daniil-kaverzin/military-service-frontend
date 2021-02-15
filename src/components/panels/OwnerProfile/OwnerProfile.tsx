@@ -28,7 +28,7 @@ import {
   Icon56RecentOutline,
   Icon56Stars3Outline,
 } from '@vkontakte/icons';
-import { useLocation, useRouter } from '@happysanta/router';
+import { useRouter, useThrottlingLocation } from '@happysanta/router';
 import { useDispatch } from 'react-redux';
 
 import './OwnerProfile.css';
@@ -50,7 +50,7 @@ export interface OwnerProfileProps extends PanelProps {}
 export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
   const { getLangKey } = useLanguage();
   const { user } = useSelector();
-  const location = useLocation();
+  const [location] = useThrottlingLocation();
   const router = useRouter();
   const [date, setDate] = useInput(parseDateForInput(new Date()));
   const [dateError, setDateError] = useState(false);

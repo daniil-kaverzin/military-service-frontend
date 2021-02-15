@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useEffect, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
-import { useLocation, useRouter } from '@happysanta/router';
+import { useRouter, useThrottlingLocation } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 import { useDispatch } from 'react-redux';
 import { Icon28WristWatchOutline, Icon28Users3Outline } from '@vkontakte/icons';
@@ -28,7 +28,7 @@ import { sendRequest } from '../../utils/api';
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
+  const [location] = useThrottlingLocation();
   const router = useRouter();
   const { user } = useSelector();
   const dispatch = useDispatch();

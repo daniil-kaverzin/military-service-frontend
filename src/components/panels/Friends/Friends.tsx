@@ -26,7 +26,7 @@ import {
   Icon56RecentOutline,
   Icon56Stars3Outline,
 } from '@vkontakte/icons';
-import { useLocation, useRouter } from '@happysanta/router';
+import { useRouter, useThrottlingLocation } from '@happysanta/router';
 import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '../../../hooks/useLanguage';
@@ -46,7 +46,7 @@ export const Friends: FC<friendsProps> = (props) => {
   const { user, friends, activeFriend } = useSelector();
   const dispatch = useDispatch();
   const router = useRouter();
-  const location = useLocation();
+  const [location] = useThrottlingLocation();
   const platform = usePlatform();
   const [showModal, setShowModal] = useState(false);
 
