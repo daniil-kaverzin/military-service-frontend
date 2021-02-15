@@ -4,6 +4,7 @@ import { noop } from '@vkontakte/vkjs';
 import { unionizeConfig } from '../../config';
 
 export interface Friends {
+  fetched: boolean;
   loading: boolean;
   rules: boolean;
   items: Array<{
@@ -28,6 +29,7 @@ export const friendsActions = unionize(
 export type FriendsAction = UnionOf<typeof friendsActions>;
 
 const initialState: Friends = {
+  fetched: false,
   loading: true,
   rules: false,
   items: [],
@@ -71,6 +73,7 @@ export const friendsReducer = (state: Friends = initialState, action: FriendsAct
         ...state,
         items: [...friends],
         loading: false,
+        fetched: true,
       };
     },
 

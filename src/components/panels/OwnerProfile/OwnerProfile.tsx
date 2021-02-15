@@ -24,12 +24,14 @@ import {
 import {
   Icon24Cancel,
   Icon24Filter,
+  Icon24ShareOutline,
   Icon56EventOutline,
   Icon56RecentOutline,
   Icon56Stars3Outline,
 } from '@vkontakte/icons';
 import { useRouter, useThrottlingLocation } from '@happysanta/router';
 import { useDispatch } from 'react-redux';
+import bridge from '@vkontakte/vk-bridge';
 
 import './OwnerProfile.css';
 import { useLanguage } from '../../../hooks/useLanguage';
@@ -44,10 +46,14 @@ import { fetchNewDate } from '../../../redux/fetch';
 import { declOfNum } from '../../../utils/words';
 import { isEmpty } from '../../../utils/validation';
 import { PopoutPortal } from '../../PopoutPortal';
+import { generateProgress } from '../../../utils/canvas';
+import { getParameterByName } from '../../../utils/url';
+import { isWeb } from '../../../utils/platform';
 
 export interface OwnerProfileProps extends PanelProps {}
 
 export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
+  const [percents, setPercents] = useState(0);
   const { getLangKey } = useLanguage();
   const { user } = useSelector();
   const [location] = useThrottlingLocation();
@@ -59,6 +65,37 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
   const dispatch = useDispatch();
 
   const activeModalId = location.getModalId();
+
+  const showStoryBox = async () => {
+    const progress = await generateProgress(
+      percents > 100 ? 100 : percents < 0 ? 0 : percents,
+      '#e2e3e6',
+      '#3f89e0',
+    );
+
+    bridge.send('VKWebAppShowStoryBox', {
+      background_type: 'none',
+      camera_type: 'front',
+      attachment: {
+        type: 'url',
+        text: 'learn_more',
+        url: `https://vk.com/app${getParameterByName('vk_app_id')}`,
+      },
+      stickers: [
+        {
+          sticker_type: 'renderable',
+          sticker: {
+            blob: progress.image,
+            content_type: 'image',
+            can_delete: false,
+            original_height: progress.height,
+            original_width: progress.width,
+            transform: { relation_width: 0.5 },
+          },
+        },
+      ],
+    });
+  };
 
   useEffect(() => {
     if (!activeModalId) {
@@ -94,9 +131,16 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
       <PanelHeader
         separator={false}
         left={
-          <PanelHeaderButton onClick={() => router.pushModal(MODAL_EDIT)}>
-            <Icon24Filter />
-          </PanelHeaderButton>
+          <Fragment>
+            <PanelHeaderButton onClick={() => router.pushModal(MODAL_EDIT)}>
+              <Icon24Filter />
+            </PanelHeaderButton>
+            {!isWeb() && (
+              <PanelHeaderButton onClick={showStoryBox}>
+                <Icon24ShareOutline />
+              </PanelHeaderButton>
+            )}
+          </Fragment>
         }
       >
         {getLangKey('owner_profile_header')}
@@ -120,6 +164,7 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
 
       {user.start_date && user.years_count && (
         <CustomProgress
+          onChangePercents={setPercents}
           dateStart={new Date(user.start_date)}
           yearsCount={user.years_count}
           before={

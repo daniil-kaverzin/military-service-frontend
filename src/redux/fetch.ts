@@ -7,6 +7,7 @@ import { activeFriendActions } from './reducers/activeFriend';
 import { userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
+import { isEmpty } from '../utils/validation';
 
 export const fetchNewDate = (
   start_date: string,
@@ -45,17 +46,21 @@ export const fetchfriends = (app_id: number): ThunkAction<void, State, unknown, 
         },
       });
 
-      const { response: friends } = await bridge.send('VKWebAppCallAPIMethod', {
-        method: 'users.get',
-        params: {
-          v: '5.130',
-          user_ids: friendsIds.join(','),
-          fields: 'photo_100',
-          access_token,
-        },
-      });
+      if (isEmpty(friendsIds)) {
+        dispatch(friendsActions.setFriends([]));
+      } else {
+        const { response: friends } = await bridge.send('VKWebAppCallAPIMethod', {
+          method: 'users.get',
+          params: {
+            v: '5.130',
+            user_ids: friendsIds.join(','),
+            fields: 'photo_100',
+            access_token,
+          },
+        });
 
-      dispatch(friendsActions.setFriends(friends));
+        dispatch(friendsActions.setFriends(friends));
+      }
     } catch {
       dispatch(userActions.setError(true));
       dispatch(friendsActions.setLoading(false));

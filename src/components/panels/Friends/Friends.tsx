@@ -54,15 +54,15 @@ export const Friends: FC<friendsProps> = (props) => {
 
   const app_id = useMemo(() => getParameterByName('vk_app_id'), []);
 
-  const { loading, rules, items } = friends;
+  const { fetched, loading, rules, items } = friends;
 
   const getfriends = useCallback(() => {
     app_id && dispatch(fetchfriends(Number(app_id)));
   }, [dispatch, app_id]);
 
   useEffect(() => {
-    items.length <= 0 && getfriends();
-  }, [items, getfriends]);
+    !fetched && getfriends();
+  }, [fetched, getfriends]);
 
   const getFriend = (id: number) => {
     if (activeFriend.info.id !== id) {
