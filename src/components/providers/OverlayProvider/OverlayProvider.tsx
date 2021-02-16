@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Root } from '@vkontakte/vkui';
 
 import { OverlayContext, OverlayContextInterface } from './OverlayContext';
@@ -9,20 +9,22 @@ export const OverlayProvider: FC = ({ children }) => {
   const [modalState, setModalState] = useState<ReactNode>();
   const [popoutState, setPopoutState] = useState<ReactNode>();
 
-  const context: OverlayContextInterface = {
-    setModal: (modal) => {
-      setModalState(modal);
-    },
-    unsetModal: () => {
-      setModalState(null);
-    },
-    setPopout: (state) => {
-      setPopoutState(state);
-    },
-    unsetPopout: () => {
-      setPopoutState(null);
-    },
-  };
+  const context: OverlayContextInterface = useMemo(() => {
+    return {
+      setModal: (modal) => {
+        setModalState(modal);
+      },
+      unsetModal: () => {
+        setModalState(null);
+      },
+      setPopout: (state) => {
+        setPopoutState(state);
+      },
+      unsetPopout: () => {
+        setPopoutState(null);
+      },
+    };
+  }, []);
 
   useEffect(() => {
     const modalElement = modalState as ReactElement;
