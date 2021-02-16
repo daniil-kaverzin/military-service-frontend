@@ -73,14 +73,14 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
     let fill = '#e64646';
 
     if (percents > 33) {
-      fill = '#ffeb3b';
+      fill = '#ecd71d';
     }
 
     if (percents > 66) {
       fill = '#4bb34b';
     }
 
-    const progress = await generateProgress(percents, '#e2e3e6', fill);
+    const progress = await generateProgress(percents, fill);
 
     bridge.send('VKWebAppShowStoryBox', {
       background_type: 'none',
@@ -144,11 +144,6 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
             <PanelHeaderButton onClick={() => router.pushModal(MODAL_EDIT)}>
               <Icon24Filter />
             </PanelHeaderButton>
-            {!isWeb() && (
-              <PanelHeaderButton onClick={showStoryBox}>
-                <Icon24ShareOutline />
-              </PanelHeaderButton>
-            )}
           </Fragment>
         }
       >
@@ -187,6 +182,20 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
             </Placeholder>
           }
         />
+      )}
+
+      {!isWeb() && (
+        <Div>
+          <Button
+            before={<Icon24ShareOutline />}
+            mode="secondary"
+            size="l"
+            stretched
+            onClick={showStoryBox}
+          >
+            {getLangKey('owner_profile_button_story')}
+          </Button>
+        </Div>
       )}
 
       <Banner

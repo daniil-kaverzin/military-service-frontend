@@ -13,6 +13,7 @@ export const pack = {
   owner_profile_progress_undefined_button: 'Начать',
   owner_profile_progress_before: 'Служба ещё не началась!',
   owner_profile_progress_after: 'Ура! Вы уже отслужили!',
+  owner_profile_button_story: 'В историю',
 
   friends_header: 'Товарищи',
   friends_get_rules_label:

@@ -56,42 +56,48 @@ const changeColor = async (
   return localCanvas.toDataURL();
 };
 
-export const generateProgress = async (
-  value: number,
-  backgroundColor: string,
-  progressColor: string,
-) => {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d')!;
-  canvas.width = 1200;
-  canvas.height = 300;
+export const generateProgress = async (value: number, progressColor: string) => {
+  const wrapperCanvas = document.createElement('canvas');
+  const wrapperContext = wrapperCanvas.getContext('2d')!;
+  wrapperCanvas.width = 1200;
+  wrapperCanvas.height = 500;
 
-  const percent = canvas.width / 100;
+  const progressCanvas = document.createElement('canvas');
+  const progressContext = progressCanvas.getContext('2d')!;
+  progressCanvas.width = wrapperCanvas.width;
+  progressCanvas.height = wrapperCanvas.height;
 
-  context.fillStyle = backgroundColor;
-  roundRect(context, 0, 150, canvas.width - 0, 140, 40);
+  const percent = wrapperCanvas.width / 100;
+
+  wrapperContext.fillStyle = '#ffffff';
+  roundRect(wrapperContext, 0, 0, wrapperCanvas.width - 0, 490, 60);
+
+  progressContext.fillStyle = '#e2e3e6';
+  roundRect(progressContext, 100, 250, wrapperCanvas.width - 200, 140, 30);
+
+  wrapperContext.drawImage(await loadImage(progressCanvas.toDataURL()), 0, 0);
 
   if (value) {
     const newImage = await changeColor(
-      canvas.toDataURL(),
+      progressCanvas.toDataURL(),
       0,
       0,
       percent * value,
-      canvas.height,
+      wrapperCanvas.height,
       progressColor,
     );
 
-    context.drawImage(await loadImage(newImage), 0, 0);
+    wrapperContext.drawImage(await loadImage(newImage), 0, 0);
   }
 
-  context.font = 'bold 128px arial';
-  context.fillStyle = progressColor;
-  context.textAlign = 'center';
-  context.fillText(`${value}%`, canvas.width / 2, 100);
+  wrapperContext.font = 'bold 128px arial';
+  wrapperContext.fillStyle = progressColor;
+  wrapperContext.textAlign = 'center';
+  wrapperContext.fillText(`${value}%`, wrapperCanvas.width / 2, 200);
 
   return {
-    image: canvas.toDataURL(),
-    width: canvas.width,
-    height: canvas.height,
+    image: wrapperCanvas.toDataURL(),
+    width: wrapperCanvas.width,
+    height: wrapperCanvas.height,
   };
 };
