@@ -72,10 +72,13 @@ export const App: FC = () => {
 
       bridge.send('VKWebAppSetViewSettings', {
         status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
-        action_bar_color: activeModalId ? blacked(actionBarColor, 0.4) : actionBarColor,
+        action_bar_color:
+          activeModalId && !user.error && !user.baseLoading
+            ? blacked(actionBarColor, 0.4)
+            : actionBarColor,
       });
     }
-  }, [activeModalId, scheme]);
+  }, [activeModalId, scheme, user.error, user.baseLoading]);
 
   return (
     <Fragment>

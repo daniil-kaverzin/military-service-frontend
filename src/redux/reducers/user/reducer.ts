@@ -65,6 +65,7 @@ export function userReducer(state: User = initialState, action: UserAction) {
       return {
         ...state,
         error,
+        baseLoading: false,
         loading: false,
       };
     },
