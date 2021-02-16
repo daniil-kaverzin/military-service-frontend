@@ -4,7 +4,8 @@
   align-items: center;
 }
 
-.CustomProgress--friend * {
+.CustomProgress--friend .CustomProgress__progressWrap *,
+.CustomProgress--friend .CustomProgress__columns * {
   color: var(--custom_progress) !important;
 }
 
