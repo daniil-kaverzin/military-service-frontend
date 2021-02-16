@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
 import { useRouter, useThrottlingLocation } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
@@ -23,11 +23,10 @@ import { blacked } from '../../utils/colors';
 import { ModalPortal } from '../ModalPortal';
 import { ScreenCrash } from '../ScreenCrash/ScreenCrash';
 import { useSelector } from '../../hooks/useSelector';
-import { sendRequest } from '../../utils/api';
+import { fetchUser } from '../../redux/fetch';
 
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
-  const [loading, setLoading] = useState(true);
   const [location] = useThrottlingLocation();
   const router = useRouter();
   const { user } = useSelector();
@@ -37,10 +36,10 @@ export const App: FC = () => {
   const activePanelId = location.getPanelId();
   const activeModalId = location.getModalId();
 
-  const init = async () => {
+  const init = useCallback(async () => {
     dispatch(userActions.setError(false));
 
-    setLoading(true);
+    dispatch(userActions.setBaseLoading(true));
 
     try {
       bridge.subscribe(({ detail }) => {
@@ -53,30 +52,17 @@ export const App: FC = () => {
         }
       });
 
+      dispatch(fetchUser());
+
       await bridge.send('VKWebAppInit');
-
-      const user = await bridge.send('VKWebAppGetUserInfo');
-
-      const { start_date, years_count } = await sendRequest('register.php');
-
-      dispatch(
-        userActions.setUser({
-          ...user,
-          start_date: start_date ? String(start_date) : undefined,
-          years_count: years_count ? Number(years_count) : undefined,
-        }),
-      );
-
-      setLoading(false);
     } catch {
-      setLoading(false);
       dispatch(userActions.setError(true));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     init();
-  }, []);
+  }, [init]);
 
   useEffect(() => {
     if (bridge.supports('VKWebAppSetViewSettings')) {
@@ -93,9 +79,11 @@ export const App: FC = () => {
 
   return (
     <Fragment>
-      {loading && <ScreenSpinner />}
-      {!loading && user.error && <ScreenCrash onReload={init} />}
-      {!loading && !user.error && (
+      {user.baseLoading && <ScreenSpinner />}
+
+      {!user.baseLoading && user.error && <ScreenCrash onReload={init} />}
+
+      {!user.baseLoading && !user.error && (
         <Fragment>
           <ModalPortal>
             <ModalRoot activeModal={activeModalId} onClose={() => router.popPage()}>

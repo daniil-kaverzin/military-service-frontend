@@ -2,23 +2,25 @@ import { ofType, unionize, UnionOf } from 'unionize';
 import { UserInfo } from '@vkontakte/vk-bridge';
 
 import { unionizeConfig } from '../../config';
-import { noop } from '@vkontakte/vkjs';
 
 interface User extends UserInfo {
+  baseLoading: boolean;
   error: boolean;
   loading: boolean;
-  access_token?: string;
+
+  access_token: string;
   start_date?: string;
   years_count?: number;
 }
 
 export const userActions = unionize(
   {
-    setError: ofType<boolean>(),
-    startChangeDate: noop,
+    setBaseLoading: ofType<User['baseLoading']>(),
+    setError: ofType<User['error']>(),
+    startChangeDate: ofType(),
     setNewDate: ofType<Partial<User>>(),
     setUser: ofType<Partial<User>>(),
-    setToken: ofType<string>(),
+    setToken: ofType<User['access_token']>(),
   },
   unionizeConfig,
 );
@@ -26,8 +28,10 @@ export const userActions = unionize(
 type UserAction = UnionOf<typeof userActions>;
 
 const initialState: User = {
+  baseLoading: true,
   error: false,
   loading: false,
+
   id: 1,
   first_name: '',
   last_name: '',
@@ -50,6 +54,13 @@ const initialState: User = {
 
 export function userReducer(state: User = initialState, action: UserAction) {
   return userActions.match(action, {
+    setBaseLoading: (value) => {
+      return {
+        ...state,
+        baseLoading: value,
+      };
+    },
+
     setError: (error) => {
       return {
         ...state,
@@ -61,10 +72,21 @@ export function userReducer(state: User = initialState, action: UserAction) {
     startChangeDate: () => ({ ...state, loading: true }),
 
     setNewDate: ({ start_date, years_count }) => {
-      return { ...state, start_date, years_count, loading: false };
+      return {
+        ...state,
+        start_date,
+        years_count,
+        loading: false,
+      };
     },
 
-    setUser: (user) => ({ ...state, ...user }),
+    setUser: (user) => {
+      return {
+        ...state,
+        ...user,
+        baseLoading: false,
+      };
+    },
 
     setToken: (access_token) => ({ ...state, access_token }),
 

@@ -9,6 +9,24 @@ import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
 
+export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
+  try {
+    const user = await bridge.send('VKWebAppGetUserInfo');
+
+    const { start_date, years_count } = await sendRequest('register.php');
+
+    dispatch(
+      userActions.setUser({
+        ...user,
+        start_date: start_date ? String(start_date) : undefined,
+        years_count: years_count ? Number(years_count) : undefined,
+      }),
+    );
+  } catch {
+    dispatch(userActions.setError(true));
+  }
+};
+
 export const fetchNewDate = (
   start_date: string,
   years_count: number,

@@ -52,8 +52,9 @@ import { isWeb } from '../../../utils/platform';
 
 export interface OwnerProfileProps extends PanelProps {}
 
+let savedPercents = 0;
+
 export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
-  const [percents, setPercents] = useState(0);
   const { getLangKey } = useLanguage();
   const { user } = useSelector();
   const [location] = useThrottlingLocation();
@@ -67,11 +68,19 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
   const activeModalId = location.getModalId();
 
   const showStoryBox = async () => {
-    const progress = await generateProgress(
-      percents > 100 ? 100 : percents < 0 ? 0 : percents,
-      '#e2e3e6',
-      '#3f89e0',
-    );
+    const percents = savedPercents > 100 ? 100 : savedPercents < 0 ? 0 : savedPercents;
+
+    let fill = '#e64646';
+
+    if (percents > 33) {
+      fill = '#ffeb3b';
+    }
+
+    if (percents > 66) {
+      fill = '#4bb34b';
+    }
+
+    const progress = await generateProgress(percents, '#e2e3e6', fill);
 
     bridge.send('VKWebAppShowStoryBox', {
       background_type: 'none',
@@ -164,7 +173,7 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
 
       {user.start_date && user.years_count && (
         <CustomProgress
-          onChangePercents={setPercents}
+          onChangePercents={(percents) => (savedPercents = percents)}
           dateStart={new Date(user.start_date)}
           yearsCount={user.years_count}
           before={

@@ -1,5 +1,4 @@
 import { ofType, unionize, UnionOf } from 'unionize';
-import { noop } from '@vkontakte/vkjs';
 
 import { unionizeConfig } from '../../config';
 
@@ -17,8 +16,8 @@ export interface Friend {
 
 export const activeFriendActions = unionize(
   {
-    setLoading: ofType<boolean>(),
-    startActiveFriend: noop,
+    setLoading: ofType<Friend['loading']>(),
+    startActiveFriend: ofType(),
     setActiveFriend: ofType<Friend['info']>(),
   },
   unionizeConfig,
