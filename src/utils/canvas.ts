@@ -67,7 +67,7 @@ export const generateProgress = async (value: number, progressColor: string) => 
   progressCanvas.width = wrapperCanvas.width;
   progressCanvas.height = wrapperCanvas.height;
 
-  const percent = wrapperCanvas.width / 100;
+  const percent = (wrapperCanvas.width - 200) / 100;
 
   wrapperContext.fillStyle = '#ffffff';
   roundRect(wrapperContext, 0, 0, wrapperCanvas.width - 0, 490, 60);
@@ -82,7 +82,7 @@ export const generateProgress = async (value: number, progressColor: string) => 
       progressCanvas.toDataURL(),
       0,
       0,
-      percent * value,
+      percent * value + 100,
       wrapperCanvas.height,
       progressColor,
     );
