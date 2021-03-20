@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react';
 import { useRouter } from '@happysanta/router';
 import {
-  Icon24Cancel,
+  Icon24Dismiss,
   Icon56BlockOutline,
   Icon56EventOutline,
   Icon56RecentOutline,
@@ -11,13 +11,14 @@ import {
   ANDROID,
   IOS,
   ModalPage,
+  ModalPageProps,
   ModalPageHeader,
   PanelHeaderButton,
+  PanelHeaderClose,
   Placeholder,
   usePlatform,
   VKCOM,
 } from '@vkontakte/vkui';
-import { ModalPageProps } from '@vkontakte/vkui/dist/components/ModalPage/ModalPage';
 
 import { useLanguage } from '../../hooks/useLanguage';
 import { CustomProgress } from '../CustomProgress';
@@ -39,9 +40,7 @@ export const FriendModal: FC<ModalPageProps> = (props) => {
           left={
             <Fragment>
               {(platform === ANDROID || platform === VKCOM) && (
-                <PanelHeaderButton onClick={() => router.popPage()}>
-                  <Icon24Cancel />
-                </PanelHeaderButton>
+                <PanelHeaderClose onClick={() => router.popPage()} />
               )}
             </Fragment>
           }
@@ -49,7 +48,7 @@ export const FriendModal: FC<ModalPageProps> = (props) => {
             <Fragment>
               {platform === IOS && (
                 <PanelHeaderButton onClick={() => router.popPage()}>
-                  {getLangKey('modals_ios_close')}
+                  <Icon24Dismiss />
                 </PanelHeaderButton>
               )}
             </Fragment>

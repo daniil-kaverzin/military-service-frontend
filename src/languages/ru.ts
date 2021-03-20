@@ -21,8 +21,6 @@ export const pack = {
   friends_get_rules_button: 'Разрешить доступ',
   friends_not_found_placeholder: 'Кажется, никого нет',
 
-  modals_ios_close: 'Закрыть',
-
   modal_edit_header: 'Редактирование',
   modal_edit_start_date_top: 'Дата начала службы',
   modal_edit_years: 'Длительность службы',

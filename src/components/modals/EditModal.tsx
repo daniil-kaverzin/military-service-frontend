@@ -1,5 +1,4 @@
 import { ChangeEvent, FC, Fragment, useState } from 'react';
-import ModalPage, { ModalPageProps } from '@vkontakte/vkui/dist/components/ModalPage/ModalPage';
 import { useRouter } from '@happysanta/router';
 import {
   ANDROID,
@@ -9,15 +8,18 @@ import {
   FormLayout,
   Input,
   IOS,
+  ModalPage,
+  ModalPageProps,
   ModalPageHeader,
   NativeSelect,
   PanelHeaderButton,
+  PanelHeaderClose,
   SimpleCell,
   Switch,
   usePlatform,
   VKCOM,
 } from '@vkontakte/vkui';
-import { Icon24Cancel } from '@vkontakte/icons';
+import { Icon24Dismiss } from '@vkontakte/icons';
 import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '../../hooks/useLanguage';
@@ -77,9 +79,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
           left={
             <Fragment>
               {(platform === ANDROID || platform === VKCOM) && (
-                <PanelHeaderButton onClick={() => router.popPage()}>
-                  <Icon24Cancel />
-                </PanelHeaderButton>
+                <PanelHeaderClose onClick={() => router.popPage()} />
               )}
             </Fragment>
           }
@@ -87,7 +87,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
             <Fragment>
               {platform === IOS && (
                 <PanelHeaderButton onClick={() => router.popPage()}>
-                  {getLangKey('modals_ios_close')}
+                  <Icon24Dismiss />
                 </PanelHeaderButton>
               )}
             </Fragment>
