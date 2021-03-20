@@ -50,7 +50,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
     setIsPrivate(event.target.checked);
   };
 
-  const saveNewDate = () => {
+  const saveNewData = () => {
     if (
       date.value === user.start_date &&
       Number(years.value) === user.years_count &&
@@ -124,7 +124,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
         </SimpleCell>
       </FormLayout>
       <Div>
-        <Button disabled={user.loading} size="l" stretched onClick={saveNewDate}>
+        <Button disabled={user.loading} size="l" stretched onClick={saveNewData}>
           {getLangKey('modal_edit_button_save')}
         </Button>
       </Div>
