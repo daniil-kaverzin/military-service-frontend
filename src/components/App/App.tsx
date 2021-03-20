@@ -27,6 +27,7 @@ import { fetchUser } from '../../redux/fetch';
 import { FriendModal } from '../modals/FriendModal';
 import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
+import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
@@ -34,7 +35,7 @@ export const App: FC = () => {
   const router = useRouter();
   const { user } = useSelector();
   const dispatch = useDispatch();
-  const [scheme, setScheme] = useState('bright_light');
+  const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
   const activeViewId = location.getViewId();
   const activePanelId = location.getPanelId();
   const activeModalId = location.getModalId();
@@ -67,13 +68,15 @@ export const App: FC = () => {
         .getPropertyValue('--background_content')
         .trim();
 
-      bridge.send('VKWebAppSetViewSettings', {
-        status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
-        action_bar_color:
-          activeModalId && !user.error && !user.baseLoading
-            ? blacked(actionBarColor, 0.4)
-            : actionBarColor,
-      });
+      if (scheme) {
+        bridge.send('VKWebAppSetViewSettings', {
+          status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
+          action_bar_color:
+            activeModalId && !user.error && !user.baseLoading
+              ? blacked(actionBarColor, 0.4)
+              : actionBarColor,
+        });
+      }
     }
   }, [activeModalId, scheme, user.error, user.baseLoading]);
 
