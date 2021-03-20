@@ -16,7 +16,7 @@ import { ModalPageProps } from '@vkontakte/vkui/dist/components/ModalPage/ModalP
 import { useLanguage } from '../../hooks/useLanguage';
 import { parseDate, sortedHolidays } from '../../utils/dates';
 
-export const HolidaysModal: FC<Omit<ModalPageProps, 'header'>> = (props) => {
+export const HolidaysModal: FC<ModalPageProps> = (props) => {
   const router = useRouter();
   const platform = usePlatform();
   const { getLangKey } = useLanguage();

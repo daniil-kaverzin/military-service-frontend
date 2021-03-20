@@ -23,7 +23,7 @@ import { CustomProgress } from '../CustomProgress';
 import { Profile } from '../Profile';
 import { useSelector } from '../../hooks/useSelector';
 
-export const FriendModal: FC<Omit<ModalPageProps, 'header'>> = (props) => {
+export const FriendModal: FC<ModalPageProps> = (props) => {
   const platform = usePlatform();
   const router = useRouter();
   const { getLangKey } = useLanguage();

@@ -28,7 +28,7 @@ import { declOfNum } from '../../utils/words';
 
 const nowDateForInput = parseDateForInput(new Date());
 
-export const EditModal: FC<Omit<ModalPageProps, 'header'>> = (props) => {
+export const EditModal: FC<ModalPageProps> = (props) => {
   const { user } = useSelector();
   const router = useRouter();
   const platform = usePlatform();
