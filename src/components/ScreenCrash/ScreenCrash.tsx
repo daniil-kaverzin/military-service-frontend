@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import { FC, MouseEvent } from 'react';
 import { Button, Panel, Placeholder, Root, View } from '@vkontakte/vkui';
 import { Icon56ErrorOutline } from '@vkontakte/icons';
 

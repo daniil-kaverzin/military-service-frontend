@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Avatar,

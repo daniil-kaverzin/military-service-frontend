@@ -1,13 +1,5 @@
 import { Text, Div, Progress as VKProgress, Title, classNames } from '@vkontakte/vkui';
-import React, {
-  FC,
-  Fragment,
-  HTMLAttributes,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, Fragment, HTMLAttributes, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import './CustomProgress.css';
 import { getDateParts, parseDateToUnix } from '../../utils/dates';

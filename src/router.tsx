@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { Page, Router, RouterContext } from '@happysanta/router';
 
 export const PAGE_PROFILE = '/';

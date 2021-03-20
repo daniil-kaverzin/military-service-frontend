@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, Fragment, useState } from 'react';
+import { ChangeEvent, FC, Fragment, useState } from 'react';
 import ModalPage, { ModalPageProps } from '@vkontakte/vkui/dist/components/ModalPage/ModalPage';
 import { useRouter } from '@happysanta/router';
 import {

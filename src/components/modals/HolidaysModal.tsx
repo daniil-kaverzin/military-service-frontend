@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { useRouter } from '@happysanta/router';
 import { Icon24Cancel } from '@vkontakte/icons';
 import {

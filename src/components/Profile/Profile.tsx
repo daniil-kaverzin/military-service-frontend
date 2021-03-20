@@ -1,5 +1,5 @@
 import { Text, Avatar, Div } from '@vkontakte/vkui';
-import React, { FC, HTMLAttributes } from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import './Profile.css';
 

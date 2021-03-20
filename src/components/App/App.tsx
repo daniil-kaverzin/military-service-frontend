@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
 import { useLocation, useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
