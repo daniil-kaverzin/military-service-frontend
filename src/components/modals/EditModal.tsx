@@ -12,6 +12,8 @@ import {
   ModalPageHeader,
   NativeSelect,
   PanelHeaderButton,
+  SimpleCell,
+  Switch,
   usePlatform,
   VKCOM,
 } from '@vkontakte/vkui';
@@ -19,7 +21,7 @@ import { Icon24Cancel } from '@vkontakte/icons';
 import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '../../hooks/useLanguage';
-import { fetchNewDate } from '../../redux/fetch';
+import { fetchNewData } from '../../redux/fetch';
 import { useInput } from '../../hooks/useInput';
 import { parseDateForInput } from '../../utils/dates';
 import { useSelector } from '../../hooks/useSelector';
@@ -35,16 +37,25 @@ export const EditModal: FC<ModalPageProps> = (props) => {
   const { getLangKey } = useLanguage();
   const [dateError, setDateError] = useState(false);
   const dispatch = useDispatch();
-  const [years] = useInput(String(user.years_count) || String(1));
+  const [years] = useInput(String(user.years_count || 1));
   const [date] = useInput(user.start_date || nowDateForInput);
+  const [isPrivate, setIsPrivate] = useState(user.private);
 
   const changeDate = (event: ChangeEvent<HTMLInputElement>) => {
     date.onChange(event);
     setDateError(false);
   };
 
+  const changeIsPrivate = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsPrivate(event.target.checked);
+  };
+
   const saveNewDate = () => {
-    if (date.value === user.start_date && Number(years.value) === user.years_count) {
+    if (
+      date.value === user.start_date &&
+      Number(years.value) === user.years_count &&
+      isPrivate === user.private
+    ) {
       router.popPage();
       return;
     }
@@ -52,7 +63,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
     if (isEmpty(date.value)) {
       setDateError(true);
     } else {
-      dispatch(fetchNewDate(date.value, Number(years.value)));
+      dispatch(fetchNewData(date.value, Number(years.value), isPrivate));
       router.popPage();
     }
   };
@@ -108,6 +119,9 @@ export const EditModal: FC<ModalPageProps> = (props) => {
             })}
           </NativeSelect>
         </FormItem>
+        <SimpleCell after={<Switch checked={isPrivate} onChange={changeIsPrivate} />} disabled>
+          {getLangKey('modal_edit_private')}
+        </SimpleCell>
       </FormLayout>
       <Div>
         <Button disabled={user.loading} size="l" stretched onClick={saveNewDate}>

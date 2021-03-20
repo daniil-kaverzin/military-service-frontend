@@ -10,6 +10,7 @@ interface User extends UserInfo {
   loading: boolean;
   start_date?: string;
   years_count?: number;
+  private: boolean;
 
   access_token: string;
 }
@@ -51,6 +52,7 @@ const initialState: User = {
   loading: false,
   start_date: undefined,
   years_count: undefined,
+  private: true,
 
   access_token: '',
 };

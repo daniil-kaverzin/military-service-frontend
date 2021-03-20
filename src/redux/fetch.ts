@@ -13,13 +13,14 @@ export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async 
   try {
     const user = await bridge.send('VKWebAppGetUserInfo');
 
-    const { start_date, years_count } = await sendRequest('register.php');
+    const { start_date, years_count, private: isPrivate } = await sendRequest('register.php');
 
     dispatch(
       userActions.setUser({
         ...user,
         start_date: start_date ? String(start_date) : undefined,
         years_count: years_count ? Number(years_count) : undefined,
+        private: Boolean(Number(isPrivate)),
       }),
     );
   } catch {
@@ -29,16 +30,19 @@ export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async 
   }
 };
 
-export const fetchNewDate = (
+export const fetchNewData = (
   start_date: string,
   years_count: number,
+  isPrivate: boolean,
 ): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
   try {
     dispatch(userActions.setUserLoading(true));
 
-    await sendRequest(`changeDate.php?start_date=${start_date}&years_count=${years_count}`);
+    await sendRequest(
+      `changeData.php?start_date=${start_date}&years_count=${years_count}&private=${isPrivate}`,
+    );
 
-    dispatch(userActions.setNewDate({ start_date, years_count }));
+    dispatch(userActions.setUser({ start_date, years_count, private: isPrivate }));
   } catch {
     dispatch(userActions.setError(true));
   } finally {
@@ -116,11 +120,21 @@ export const fetchActiveFriend = (
       },
     });
 
+    dispatch(activeFriendActions.setActiveFriend({ ...friend[0] }));
+
     const { start_date, years_count } = await sendRequest(`getUserById.php?id=${user_id}`);
 
-    dispatch(activeFriendActions.setActiveFriend({ ...friend[0], start_date, years_count }));
-  } catch {
-    dispatch(userActions.setError(true));
+    dispatch(
+      activeFriendActions.setActiveFriend({
+        start_date,
+        years_count,
+        private: false,
+      }),
+    );
+  } catch (statusCode) {
+    String(statusCode)[0] === '5'
+      ? dispatch(userActions.setError(true))
+      : dispatch(activeFriendActions.setActiveFriend({ private: true }));
   } finally {
     dispatch(activeFriendActions.setLoading(false));
   }

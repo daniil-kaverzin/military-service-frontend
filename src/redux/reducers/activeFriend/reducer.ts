@@ -11,6 +11,7 @@ export interface Friend {
     photo_200: string;
     start_date?: string;
     years_count?: number;
+    private: boolean;
   };
 }
 
@@ -18,7 +19,7 @@ export const activeFriendActions = unionize(
   {
     setLoading: ofType<Friend['loading']>(),
     startActiveFriend: ofType(),
-    setActiveFriend: ofType<Friend['info']>(),
+    setActiveFriend: ofType<Partial<Friend['info']>>(),
   },
   unionizeConfig,
 );
@@ -34,6 +35,7 @@ const initialState: Friend = {
     photo_200: '',
     start_date: undefined,
     years_count: undefined,
+    private: true,
   },
 };
 
@@ -46,7 +48,7 @@ export const activeFriendReducer = (state: Friend = initialState, action: Active
       };
     },
 
-    setActiveFriend: (info) => ({ ...state, info }),
+    setActiveFriend: (info) => ({ ...state, info: { ...state.info, ...info } }),
 
     default: () => state,
   });

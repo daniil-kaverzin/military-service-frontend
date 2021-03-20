@@ -2,6 +2,7 @@ import { FC, Fragment } from 'react';
 import { useRouter } from '@happysanta/router';
 import {
   Icon24Cancel,
+  Icon56BlockOutline,
   Icon56EventOutline,
   Icon56RecentOutline,
   Icon56Stars3Outline,
@@ -63,29 +64,37 @@ export const FriendModal: FC<ModalPageProps> = (props) => {
         avatar={activeFriend.info.photo_200}
         name={`${activeFriend.info.first_name} ${activeFriend.info.last_name}`}
       />
-
-      {(!activeFriend.info.start_date || !activeFriend.info.years_count) && (
-        <Placeholder icon={<Icon56EventOutline />}>
-          {getLangKey('modal_friend_progress_undefined')}
+      {activeFriend.info.private && (
+        <Placeholder icon={<Icon56BlockOutline />}>
+          {getLangKey('modal_friend_is_private')}
         </Placeholder>
       )}
+      {!activeFriend.info.private && (
+        <Fragment>
+          {activeFriend.info.start_date && activeFriend.info.years_count && (
+            <CustomProgress
+              dateStart={new Date(activeFriend.info.start_date)}
+              yearsCount={Number(activeFriend.info.years_count)}
+              before={
+                <Placeholder icon={<Icon56RecentOutline />}>
+                  {getLangKey('modal_friend_progress_before')}
+                </Placeholder>
+              }
+              after={
+                <Placeholder icon={<Icon56Stars3Outline />}>
+                  {getLangKey('modal_friend_progress_after')}
+                </Placeholder>
+              }
+              friend
+            />
+          )}
 
-      {activeFriend.info.start_date && activeFriend.info.years_count && (
-        <CustomProgress
-          dateStart={new Date(activeFriend.info.start_date)}
-          yearsCount={Number(activeFriend.info.years_count)}
-          before={
-            <Placeholder icon={<Icon56RecentOutline />}>
-              {getLangKey('modal_friend_progress_before')}
+          {(!activeFriend.info.start_date || !activeFriend.info.years_count) && (
+            <Placeholder icon={<Icon56EventOutline />}>
+              {getLangKey('modal_friend_progress_undefined')}
             </Placeholder>
-          }
-          after={
-            <Placeholder icon={<Icon56Stars3Outline />}>
-              {getLangKey('modal_friend_progress_after')}
-            </Placeholder>
-          }
-          friend
-        />
+          )}
+        </Fragment>
       )}
     </ModalPage>
   );
