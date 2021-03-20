@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useCallback } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Banner,
@@ -29,18 +29,19 @@ import { getHoliday, parseDate } from '../../../utils/dates';
 import { generateProgress } from '../../../utils/canvas';
 import { getParameterByName } from '../../../utils/url';
 import { isWeb } from '../../../utils/platform';
+import { useRef } from 'react';
 
 export interface OwnerProfileProps extends PanelProps {}
-
-let savedPercents = 0;
 
 export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
   const { getLangKey } = useLanguage();
   const { user } = useSelector();
   const router = useRouter();
+  const savedPercents = useRef(0);
 
-  const showStoryBox = async () => {
-    const percents = savedPercents > 100 ? 100 : savedPercents < 0 ? 0 : savedPercents;
+  const showStoryBox = useCallback(async () => {
+    const percents =
+      savedPercents.current > 100 ? 100 : savedPercents.current < 0 ? 0 : savedPercents.current;
 
     let fill = '#e64646';
 
@@ -76,7 +77,7 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
         },
       ],
     });
-  };
+  }, [savedPercents]);
 
   const holiday = getHoliday(getLangKey('holiday_banner_not_holiday_title'));
 
@@ -113,7 +114,7 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
 
       {user.start_date && user.years_count && (
         <CustomProgress
-          onChangePercents={(percents) => (savedPercents = percents)}
+          onChangePercents={(percents) => (savedPercents.current = percents)}
           dateStart={new Date(user.start_date)}
           yearsCount={user.years_count}
           before={

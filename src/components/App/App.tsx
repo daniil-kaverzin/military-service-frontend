@@ -36,9 +36,6 @@ export const App: FC = () => {
   const { user } = useSelector();
   const dispatch = useDispatch();
   const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
-  const activeViewId = location.getViewId();
-  const activePanelId = location.getPanelId();
-  const activeModalId = location.getModalId();
 
   const init = useCallback(async () => {
     dispatch(userActions.setError(false));
@@ -72,13 +69,13 @@ export const App: FC = () => {
         bridge.send('VKWebAppSetViewSettings', {
           status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
           action_bar_color:
-            activeModalId && !user.error && !user.baseLoading
+            location.getModalId() && !user.error && !user.baseLoading
               ? blacked(actionBarColor, 0.4)
               : actionBarColor,
         });
       }
     }
-  }, [activeModalId, scheme, user.error, user.baseLoading]);
+  }, [location, scheme, user.error, user.baseLoading]);
 
   const renderModals = useMemo(() => {
     return (
@@ -99,18 +96,18 @@ export const App: FC = () => {
       {!user.baseLoading && !user.error && (
         <Fragment>
           <Epic
-            activeStory={activeViewId}
+            activeStory={location.getViewId()}
             tabbar={
               <Tabbar>
                 <TabbarItem
-                  selected={activePanelId === PANEL_PROFILE}
+                  selected={location.getPanelId() === PANEL_PROFILE}
                   onClick={() => router.pushPage(PAGE_PROFILE)}
                   text={getLangKey('epic_profile')}
                 >
                   <Icon28WristWatchOutline />
                 </TabbarItem>
                 <TabbarItem
-                  selected={activePanelId === PANEL_FRIENDS}
+                  selected={location.getPanelId() === PANEL_FRIENDS}
                   onClick={() => router.pushPage(PAGE_FRIENDS)}
                   text={getLangKey('epic_users')}
                 >
@@ -122,7 +119,7 @@ export const App: FC = () => {
             <View
               modal={renderModals}
               id={VIEW_MAIN}
-              activePanel={activePanelId}
+              activePanel={location.getViewActivePanel(VIEW_MAIN) || ''}
               onSwipeBack={() => router.popPage()}
               history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_MAIN)}
             >
@@ -131,7 +128,7 @@ export const App: FC = () => {
             <View
               modal={renderModals}
               id={VIEW_EXTRA}
-              activePanel={activePanelId}
+              activePanel={location.getViewActivePanel(VIEW_EXTRA) || ''}
               onSwipeBack={() => router.popPage()}
               history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_EXTRA)}
             >
