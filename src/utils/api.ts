@@ -11,12 +11,12 @@ export const sendRequest = (url: string): Promise<Dictionary<any>> => {
       if (String(xhr.status)[0] === '2') {
         resolve(JSON.parse(xhr.response));
       } else {
-        reject();
+        reject(xhr.status);
       }
     };
 
     xhr.onerror = () => {
-      reject();
+      reject(xhr.status);
     };
   });
 };

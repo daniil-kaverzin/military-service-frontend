@@ -31,7 +31,7 @@ import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '../../../hooks/useLanguage';
 import { useSelector } from '../../../hooks/useSelector';
-import { fetchfriends, fetchActiveFriend } from '../../../redux/fetch';
+import { fetchFriends, fetchActiveFriend } from '../../../redux/fetch';
 import { MODAL_EDIT, MODAL_HOLIDAYS, MODAL_FRIEND } from '../../../router';
 import { ModalPortal } from '../../ModalPortal';
 import { Profile } from '../../Profile';
@@ -57,7 +57,7 @@ export const Friends: FC<friendsProps> = (props) => {
   const { fetched, loading, rules, items } = friends;
 
   const getfriends = useCallback(() => {
-    app_id && dispatch(fetchfriends(Number(app_id)));
+    app_id && dispatch(fetchFriends(Number(app_id)));
   }, [dispatch, app_id]);
 
   useEffect(() => {

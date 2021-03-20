@@ -6,18 +6,19 @@ import { unionizeConfig } from '../../config';
 interface User extends UserInfo {
   baseLoading: boolean;
   error: boolean;
-  loading: boolean;
 
-  access_token: string;
+  loading: boolean;
   start_date?: string;
   years_count?: number;
+
+  access_token: string;
 }
 
 export const userActions = unionize(
   {
     setBaseLoading: ofType<User['baseLoading']>(),
+    setUserLoading: ofType<User['loading']>(),
     setError: ofType<User['error']>(),
-    startChangeDate: ofType(),
     setNewDate: ofType<Partial<User>>(),
     setUser: ofType<Partial<User>>(),
     setToken: ofType<User['access_token']>(),
@@ -30,7 +31,6 @@ type UserAction = UnionOf<typeof userActions>;
 const initialState: User = {
   baseLoading: true,
   error: false,
-  loading: false,
 
   id: 1,
   first_name: '',
@@ -47,17 +47,20 @@ const initialState: User = {
   photo_100: '',
   photo_200: '',
   timezone: 1,
-  access_token: '',
+
+  loading: false,
   start_date: undefined,
   years_count: undefined,
+
+  access_token: '',
 };
 
 export function userReducer(state: User = initialState, action: UserAction) {
   return userActions.match(action, {
-    setBaseLoading: (value) => {
+    setBaseLoading: (baseLoading) => {
       return {
         ...state,
-        baseLoading: value,
+        baseLoading,
       };
     },
 
@@ -65,19 +68,21 @@ export function userReducer(state: User = initialState, action: UserAction) {
       return {
         ...state,
         error,
-        baseLoading: false,
-        loading: false,
       };
     },
 
-    startChangeDate: () => ({ ...state, loading: true }),
+    setUserLoading: (loading) => {
+      return {
+        ...state,
+        loading,
+      };
+    },
 
     setNewDate: ({ start_date, years_count }) => {
       return {
         ...state,
         start_date,
         years_count,
-        loading: false,
       };
     },
 
@@ -85,7 +90,6 @@ export function userReducer(state: User = initialState, action: UserAction) {
       return {
         ...state,
         ...user,
-        baseLoading: false,
       };
     },
 

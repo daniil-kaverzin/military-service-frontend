@@ -46,9 +46,7 @@ export const activeFriendReducer = (state: Friend = initialState, action: Active
       };
     },
 
-    startActiveFriend: () => ({ ...state, loading: true }),
-
-    setActiveFriend: (info) => ({ ...state, info, loading: false }),
+    setActiveFriend: (info) => ({ ...state, info }),
 
     default: () => state,
   });

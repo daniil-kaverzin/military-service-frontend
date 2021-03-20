@@ -16,11 +16,10 @@ export interface Friends {
 
 export const friendsActions = unionize(
   {
-    setLoading: ofType<Friends['loading']>(),
-    startCheckRules: ofType(),
-    setFriendsRulesError: ofType(),
-    startFriends: ofType(),
+    setFriendsLoading: ofType<Friends['loading']>(),
+    setRules: ofType<Friends['rules']>(),
     setFriends: ofType<Friends['items']>(),
+    setFriendsFetched: ofType<Friends['fetched']>(),
   },
   unionizeConfig,
 );
@@ -36,34 +35,24 @@ const initialState: Friends = {
 
 export const friendsReducer = (state: Friends = initialState, action: FriendsAction) => {
   return friendsActions.match(action, {
-    setLoading: (loading) => {
+    setFriendsLoading: (loading) => {
       return {
         ...state,
         loading,
       };
     },
 
-    startCheckRules: () => {
+    setRules: (rules) => {
       return {
         ...state,
-        loading: true,
-        rules: false,
+        rules,
       };
     },
 
-    setFriendsRulesError: () => {
+    setFriendsFetched: (fetched) => {
       return {
         ...state,
-        loading: false,
-        rules: false,
-      };
-    },
-
-    startFriends: () => {
-      return {
-        ...state,
-        loading: true,
-        rules: true,
+        fetched,
       };
     },
 
@@ -71,8 +60,6 @@ export const friendsReducer = (state: Friends = initialState, action: FriendsAct
       return {
         ...state,
         items: [...friends],
-        loading: false,
-        fetched: true,
       };
     },
 

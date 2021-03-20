@@ -24,6 +24,8 @@ export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async 
     );
   } catch {
     dispatch(userActions.setError(true));
+  } finally {
+    dispatch(userActions.setBaseLoading(false));
   }
 };
 
@@ -32,21 +34,23 @@ export const fetchNewDate = (
   years_count: number,
 ): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
   try {
-    dispatch(userActions.startChangeDate());
+    dispatch(userActions.setUserLoading(true));
 
     await sendRequest(`changeDate.php?start_date=${start_date}&years_count=${years_count}`);
 
     dispatch(userActions.setNewDate({ start_date, years_count }));
   } catch {
     dispatch(userActions.setError(true));
+  } finally {
+    dispatch(userActions.setUserLoading(false));
   }
 };
 
-export const fetchfriends = (app_id: number): ThunkAction<void, State, unknown, Action> => async (
+export const fetchFriends = (app_id: number): ThunkAction<void, State, unknown, Action> => async (
   dispatch,
 ) => {
   try {
-    dispatch(friendsActions.startCheckRules());
+    dispatch(friendsActions.setFriendsLoading(true));
 
     const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
       app_id,
@@ -54,7 +58,8 @@ export const fetchfriends = (app_id: number): ThunkAction<void, State, unknown, 
     });
 
     dispatch(userActions.setToken(access_token));
-    dispatch(friendsActions.startFriends());
+    dispatch(friendsActions.setRules(true));
+
     try {
       const { response: friendsIds } = await bridge.send('VKWebAppCallAPIMethod', {
         method: 'friends.getAppUsers',
@@ -67,6 +72,8 @@ export const fetchfriends = (app_id: number): ThunkAction<void, State, unknown, 
       if (isEmpty(friendsIds)) {
         dispatch(friendsActions.setFriends([]));
       } else {
+        if (friendsIds.length > 100) friendsIds.length = 100;
+
         const { response: friends } = await bridge.send('VKWebAppCallAPIMethod', {
           method: 'users.get',
           params: {
@@ -78,13 +85,17 @@ export const fetchfriends = (app_id: number): ThunkAction<void, State, unknown, 
         });
 
         dispatch(friendsActions.setFriends(friends));
+        dispatch(friendsActions.setFriendsFetched(true));
       }
     } catch {
       dispatch(userActions.setError(true));
-      dispatch(friendsActions.setLoading(false));
+    } finally {
+      dispatch(friendsActions.setFriendsLoading(false));
     }
-  } catch {
-    dispatch(friendsActions.setFriendsRulesError());
+  } catch (statusCode) {
+    String(statusCode)[0] === '5' && dispatch(userActions.setError(true));
+  } finally {
+    dispatch(friendsActions.setFriendsLoading(false));
   }
 };
 
@@ -93,7 +104,7 @@ export const fetchActiveFriend = (
   user_id: number,
 ): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
   try {
-    dispatch(activeFriendActions.startActiveFriend());
+    dispatch(activeFriendActions.setLoading(true));
 
     const { response: friend } = await bridge.send('VKWebAppCallAPIMethod', {
       method: 'users.get',
@@ -109,7 +120,8 @@ export const fetchActiveFriend = (
 
     dispatch(activeFriendActions.setActiveFriend({ ...friend[0], start_date, years_count }));
   } catch {
-    dispatch(activeFriendActions.setLoading(false));
     dispatch(userActions.setError(true));
+  } finally {
+    dispatch(activeFriendActions.setLoading(false));
   }
 };
