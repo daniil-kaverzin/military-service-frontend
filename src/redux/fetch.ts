@@ -132,9 +132,9 @@ export const fetchActiveFriend = (
       }),
     );
   } catch (statusCode) {
-    String(statusCode)[0] === '5'
-      ? dispatch(userActions.setError(true))
-      : dispatch(activeFriendActions.setActiveFriend({ private: true }));
+    String(statusCode)[0] === '4'
+      ? dispatch(activeFriendActions.setActiveFriend({ private: true }))
+      : dispatch(userActions.setError(true));
   } finally {
     dispatch(activeFriendActions.setLoading(false));
   }
