@@ -1,6 +1,6 @@
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import React, { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
-import { useRouter, useThrottlingLocation } from '@happysanta/router';
+import { useLocation, useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 import { useDispatch } from 'react-redux';
 import { Icon28WristWatchOutline, Icon28Users3Outline } from '@vkontakte/icons';
@@ -17,17 +17,20 @@ import {
   PANEL_FRIENDS,
   VIEW_EXTRA,
   VIEW_MAIN,
+  MODAL_HOLIDAYS,
 } from '../../router';
 import { userActions } from '../../redux/reducers/user';
 import { blacked } from '../../utils/colors';
-import { ModalPortal } from '../ModalPortal';
 import { ScreenCrash } from '../ScreenCrash/ScreenCrash';
 import { useSelector } from '../../hooks/useSelector';
 import { fetchUser } from '../../redux/fetch';
+import { FriendModal } from '../modals/FriendModal';
+import { EditModal } from '../modals/EditModal';
+import { HolidaysModal } from '../modals/HolidaysModal';
 
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
-  const [location] = useThrottlingLocation();
+  const location = useLocation();
   const router = useRouter();
   const { user } = useSelector();
   const dispatch = useDispatch();
@@ -39,28 +42,22 @@ export const App: FC = () => {
   const init = useCallback(async () => {
     dispatch(userActions.setError(false));
 
-    dispatch(userActions.setBaseLoading(true));
-
-    try {
-      bridge.subscribe(({ detail }) => {
-        if (detail.type === 'VKWebAppUpdateConfig') {
-          const localScheme = detail.data.scheme || 'bright_light';
-
-          setScheme(localScheme);
-
-          document.body.setAttribute('scheme', localScheme);
-        }
-      });
-
-      dispatch(fetchUser());
-
-      await bridge.send('VKWebAppInit');
-    } catch {
-      dispatch(userActions.setError(true));
-    }
+    dispatch(fetchUser());
   }, [dispatch]);
 
   useEffect(() => {
+    bridge.subscribe(({ detail }) => {
+      if (detail.type === 'VKWebAppUpdateConfig') {
+        const localScheme = detail.data.scheme || 'bright_light';
+
+        setScheme(localScheme);
+
+        document.body.setAttribute('scheme', localScheme);
+      }
+    });
+
+    bridge.send('VKWebAppInit');
+
     init();
   }, [init]);
 
@@ -80,6 +77,16 @@ export const App: FC = () => {
     }
   }, [activeModalId, scheme, user.error, user.baseLoading]);
 
+  const renderModals = useMemo(() => {
+    return (
+      <ModalRoot activeModal={location.getModalId()} onClose={() => router.popPage()}>
+        <FriendModal id={MODAL_FRIEND} />
+        <EditModal id={MODAL_EDIT} />
+        <HolidaysModal id={MODAL_HOLIDAYS} />
+      </ModalRoot>
+    );
+  }, [router, location]);
+
   return (
     <Fragment>
       {user.baseLoading && <ScreenSpinner />}
@@ -88,13 +95,6 @@ export const App: FC = () => {
 
       {!user.baseLoading && !user.error && (
         <Fragment>
-          <ModalPortal>
-            <ModalRoot activeModal={activeModalId} onClose={() => router.popPage()}>
-              <div id={MODAL_EDIT} />
-              <div id={MODAL_FRIEND} />
-            </ModalRoot>
-          </ModalPortal>
-
           <Epic
             activeStory={activeViewId}
             tabbar={
@@ -117,6 +117,7 @@ export const App: FC = () => {
             }
           >
             <View
+              modal={renderModals}
               id={VIEW_MAIN}
               activePanel={activePanelId}
               onSwipeBack={() => router.popPage()}
@@ -125,6 +126,7 @@ export const App: FC = () => {
               <OwnerProfile id={PANEL_PROFILE} />
             </View>
             <View
+              modal={renderModals}
               id={VIEW_EXTRA}
               activePanel={activePanelId}
               onSwipeBack={() => router.popPage()}

@@ -11,7 +11,6 @@ import { RouterProvider } from './router';
 import { LanguageProvider } from './components/providers/LanguageProvider';
 import { App } from './components/App';
 import { store } from './redux/createStore';
-import { OverlayProvider } from './components/providers/OverlayProvider';
 
 ReactDOM.render(
   <StoreProvider store={store}>
@@ -20,9 +19,7 @@ ReactDOM.render(
         <AdaptivityProvider>
           <LanguageProvider>
             <AppRoot>
-              <OverlayProvider>
-                <App />
-              </OverlayProvider>
+              <App />
             </AppRoot>
           </LanguageProvider>
         </AdaptivityProvider>
