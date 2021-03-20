@@ -92,6 +92,7 @@ export const Friends: FC<friendsProps> = (props) => {
 
       {!loading && !rules && (
         <Placeholder
+          stretched
           icon={<Icon56CheckShieldOutline />}
           action={
             <Button size="m" onClick={getfriends}>
@@ -104,7 +105,7 @@ export const Friends: FC<friendsProps> = (props) => {
       )}
 
       {!loading && rules && items.length <= 0 && (
-        <Placeholder icon={<Icon56ArchiveOutline />}>
+        <Placeholder stretched icon={<Icon56ArchiveOutline />}>
           {getLangKey('friends_not_found_placeholder')}
         </Placeholder>
       )}
