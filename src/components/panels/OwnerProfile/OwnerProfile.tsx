@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback } from 'react';
+import { FC, Fragment, useCallback, useRef } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Banner,
@@ -29,7 +29,6 @@ import { getHoliday, parseDate } from '../../../utils/dates';
 import { generateProgress } from '../../../utils/canvas';
 import { getParameterByName } from '../../../utils/url';
 import { isWeb } from '../../../utils/platform';
-import { useRef } from 'react';
 
 export interface OwnerProfileProps extends PanelProps {}
 

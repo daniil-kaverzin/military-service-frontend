@@ -33,13 +33,13 @@ export const Friends: FC<friendsProps> = (props) => {
 
   const { fetched, loading, rules, items } = friends;
 
-  const getfriends = useCallback(() => {
+  const getFriends = useCallback(() => {
     app_id && dispatch(fetchFriends(Number(app_id)));
   }, [dispatch, app_id]);
 
   useEffect(() => {
-    !fetched && getfriends();
-  }, [fetched, getfriends]);
+    !fetched && getFriends();
+  }, [fetched, getFriends]);
 
   const getFriend = (id: number) => {
     if (activeFriend.info.id !== id) {
@@ -72,7 +72,7 @@ export const Friends: FC<friendsProps> = (props) => {
           stretched
           icon={<Icon56CheckShieldOutline />}
           action={
-            <Button size="m" onClick={getfriends}>
+            <Button size="m" onClick={getFriends}>
               {getLangKey('friends_get_rules_button')}
             </Button>
           }

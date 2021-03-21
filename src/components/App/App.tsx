@@ -1,5 +1,6 @@
 import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
+import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 import { useLocation, useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 import { useDispatch } from 'react-redux';
@@ -21,13 +22,12 @@ import {
 } from '../../router';
 import { userActions } from '../../redux/reducers/user';
 import { blacked } from '../../utils/colors';
-import { ScreenCrash } from '../ScreenCrash/ScreenCrash';
+import { ScreenCrash } from '../ScreenCrash';
 import { useSelector } from '../../hooks/useSelector';
 import { fetchUser } from '../../redux/fetch';
 import { FriendModal } from '../modals/FriendModal';
 import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
-import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
@@ -69,7 +69,7 @@ export const App: FC = () => {
         bridge.send('VKWebAppSetViewSettings', {
           status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
           action_bar_color:
-            location.getModalId() && !user.error && !user.baseLoading
+            location.hasOverlay() && !user.error && !user.baseLoading
               ? blacked(actionBarColor, 0.4)
               : actionBarColor,
         });

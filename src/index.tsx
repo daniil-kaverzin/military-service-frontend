@@ -1,6 +1,8 @@
 import 'core-js/features/map';
 import 'core-js/features/set';
-import React from 'react';
+import 'core-js/features/promise';
+import 'core-js/features/symbol';
+import 'core-js/features/object';
 import ReactDOM from 'react-dom';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
