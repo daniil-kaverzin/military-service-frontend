@@ -16,6 +16,27 @@ export const getDateParts = (allSeconds: number) => {
 
 export const parseDateToUnix = (date: Date) => date.getTime() / 1000;
 
+export const getProgressBetweenDates = (dateStart?: string, yearsCount?: number) => {
+  if (dateStart && yearsCount) {
+    const dateStartUnix = parseDateToUnix(new Date(dateStart));
+
+    const dateEnd = new Date(dateStart);
+
+    dateEnd.setFullYear(dateEnd.getFullYear() + yearsCount);
+
+    const dateEndUnix = parseDateToUnix(dateEnd);
+
+    const differenceBetweenNowAndEnd = dateEndUnix - parseDateToUnix(new Date());
+    const differenceBetweenDates = dateEndUnix - dateStartUnix;
+
+    const onePercent = differenceBetweenDates / 100;
+
+    return Number((100 - differenceBetweenNowAndEnd / onePercent).toFixed(3));
+  }
+
+  return 0;
+};
+
 export const parseDateForInput = (date: Date) => {
   date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
   return date.toJSON().slice(0, 10);

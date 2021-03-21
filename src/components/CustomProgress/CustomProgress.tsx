@@ -12,11 +12,10 @@ export interface CustomProgressProps extends HTMLAttributes<HTMLDivElement> {
   friend?: boolean;
   before?: ReactNode;
   after?: ReactNode;
-  onChangePercents?: (percents: number) => void;
 }
 
 export const CustomProgress: FC<CustomProgressProps> = (props) => {
-  const { onChangePercents, before, after, friend, dateStart, yearsCount, ...restProps } = props;
+  const { before, after, friend, dateStart, yearsCount, ...restProps } = props;
 
   const [nowUnix, setNowUnix] = useState(parseDateToUnix(new Date()));
   const { getLangKey } = useLanguage();
@@ -59,10 +58,8 @@ export const CustomProgress: FC<CustomProgressProps> = (props) => {
       setNowUnix(parseDateToUnix(new Date()));
     }, 1000);
 
-    onChangePercents && onChangePercents(percents);
-
     return () => clearInterval(tick);
-  }, [percents, onChangePercents]);
+  }, []);
 
   return (
     <Div

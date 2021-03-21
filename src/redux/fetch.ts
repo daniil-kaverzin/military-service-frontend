@@ -4,14 +4,22 @@ import bridge from '@vkontakte/vk-bridge';
 
 import { State } from './createStore';
 import { activeFriendActions } from './reducers/activeFriend';
-import { userActions } from './reducers/user';
+import { User, userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
+import { isWeb } from '../utils/platform';
 
 export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
   try {
     const user = await bridge.send('VKWebAppGetUserInfo');
+
+    let promoBannerProps: User['promoBannerProps'] = undefined;
+
+    if (!isWeb()) {
+      //@ts-ignore
+      promoBannerProps = await bridge.send('VKWebAppGetAds');
+    }
 
     const { start_date, years_count, private: isPrivate } = await sendRequest('register.php');
 
@@ -21,6 +29,7 @@ export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async 
         start_date: start_date ? String(start_date) : undefined,
         years_count: years_count ? Number(years_count) : undefined,
         private: Boolean(Number(isPrivate)),
+        promoBannerProps,
       }),
     );
   } catch {

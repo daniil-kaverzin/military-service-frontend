@@ -1,9 +1,10 @@
 import { ofType, unionize, UnionOf } from 'unionize';
 import { UserInfo } from '@vkontakte/vk-bridge';
+import { PromoBannerProps } from '@vkontakte/vkui';
 
 import { unionizeConfig } from '../../config';
 
-interface User extends UserInfo {
+export interface User extends UserInfo {
   baseLoading: boolean;
   error: boolean;
 
@@ -11,6 +12,8 @@ interface User extends UserInfo {
   start_date?: string;
   years_count?: number;
   private: boolean;
+
+  promoBannerProps?: PromoBannerProps;
 
   access_token: string;
 }
@@ -20,7 +23,6 @@ export const userActions = unionize(
     setBaseLoading: ofType<User['baseLoading']>(),
     setUserLoading: ofType<User['loading']>(),
     setError: ofType<User['error']>(),
-    setNewDate: ofType<Partial<User>>(),
     setUser: ofType<Partial<User>>(),
     setToken: ofType<User['access_token']>(),
   },
@@ -54,6 +56,8 @@ const initialState: User = {
   years_count: undefined,
   private: true,
 
+  promoBannerProps: undefined,
+
   access_token: '',
 };
 
@@ -77,14 +81,6 @@ export function userReducer(state: User = initialState, action: UserAction) {
       return {
         ...state,
         loading,
-      };
-    },
-
-    setNewDate: ({ start_date, years_count }) => {
-      return {
-        ...state,
-        start_date,
-        years_count,
       };
     },
 

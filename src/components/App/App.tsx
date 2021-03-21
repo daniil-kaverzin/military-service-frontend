@@ -1,4 +1,4 @@
-import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
 import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 import { useLocation, useRouter } from '@happysanta/router';
@@ -19,6 +19,7 @@ import {
   VIEW_EXTRA,
   VIEW_MAIN,
   MODAL_HOLIDAYS,
+  POPOUT_SELECT_SHARE_MODE,
 } from '../../router';
 import { userActions } from '../../redux/reducers/user';
 import { blacked } from '../../utils/colors';
@@ -28,6 +29,7 @@ import { fetchUser } from '../../redux/fetch';
 import { FriendModal } from '../modals/FriendModal';
 import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
+import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
 
 export const App: FC = () => {
   const { getLangKey } = useLanguage();
@@ -36,6 +38,7 @@ export const App: FC = () => {
   const { user } = useSelector();
   const dispatch = useDispatch();
   const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
+  const openPopoutSelectShareMoreRef = useRef<HTMLElement | null>(null);
 
   const init = useCallback(async () => {
     dispatch(userActions.setError(false));
@@ -87,6 +90,17 @@ export const App: FC = () => {
     );
   }, [router, location]);
 
+  const renderPopouts = useMemo(() => {
+    switch (location.getPopupId()) {
+      case POPOUT_SELECT_SHARE_MODE:
+        return (
+          <SelectShareModePopout toggleRef={openPopoutSelectShareMoreRef.current as Element} />
+        );
+      default:
+        return undefined;
+    }
+  }, [location]);
+
   return (
     <Fragment>
       {user.baseLoading && <ScreenSpinner />}
@@ -118,15 +132,20 @@ export const App: FC = () => {
           >
             <View
               modal={renderModals}
+              popout={renderPopouts}
               id={VIEW_MAIN}
               activePanel={location.getViewActivePanel(VIEW_MAIN) || ''}
               onSwipeBack={() => router.popPage()}
               history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_MAIN)}
             >
-              <OwnerProfile id={PANEL_PROFILE} />
+              <OwnerProfile
+                id={PANEL_PROFILE}
+                openPopoutSelectShareMoreRef={openPopoutSelectShareMoreRef}
+              />
             </View>
             <View
               modal={renderModals}
+              popout={renderPopouts}
               id={VIEW_EXTRA}
               activePanel={location.getViewActivePanel(VIEW_EXTRA) || ''}
               onSwipeBack={() => router.popPage()}
