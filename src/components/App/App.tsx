@@ -115,7 +115,9 @@ export const App: FC = () => {
   }, [location]);
 
   return (
-    <SplitLayout header={!user.baseLoading && <PanelHeader shadow separator={false} />}>
+    <SplitLayout
+      header={!user.baseLoading && !user.error && <PanelHeader shadow separator={false} />}
+    >
       <SplitCol width="100%" spaced={!isMobile}>
         {user.baseLoading && <ScreenSpinner />}
 
