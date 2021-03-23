@@ -9,7 +9,6 @@ import {
   PanelHeaderButton,
   Placeholder,
   ScreenSpinner,
-  Separator,
 } from '@vkontakte/vkui';
 import { Ref } from '@vkontakte/vkui/dist/types';
 import {
