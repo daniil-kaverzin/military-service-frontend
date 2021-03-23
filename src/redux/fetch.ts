@@ -98,7 +98,6 @@ export const fetchFriends = (app_id: number): ThunkAction<void, State, unknown, 
         });
 
         dispatch(friendsActions.setFriends(friends));
-        dispatch(friendsActions.setFriendsFetched(true));
       }
     } catch {
       dispatch(userActions.setError(true));

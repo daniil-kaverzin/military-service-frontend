@@ -22,9 +22,7 @@ import { MODAL_FRIEND } from '../../../router';
 import { getParameterByName } from '../../../utils/url';
 import { useIsMobile } from '../../../hooks/useIsMobile';
 
-export interface friendsProps extends PanelProps {}
-
-export const Friends: FC<friendsProps> = (props) => {
+export const Friends: FC<PanelProps> = (props) => {
   const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
   const { user, friends, activeFriend } = useSelector();
@@ -34,15 +32,15 @@ export const Friends: FC<friendsProps> = (props) => {
 
   const app_id = useMemo(() => getParameterByName('vk_app_id'), []);
 
-  const { fetched, loading, rules, items } = friends;
+  const { loading, rules, items } = friends;
 
   const getFriends = useCallback(() => {
     app_id && dispatch(fetchFriends(Number(app_id)));
   }, [dispatch, app_id]);
 
   useEffect(() => {
-    !fetched && getFriends();
-  }, [fetched, getFriends]);
+    !items && getFriends();
+  }, [items, getFriends]);
 
   const getFriend = (id: number) => {
     if (activeFriend.info.id !== id) {
@@ -85,15 +83,16 @@ export const Friends: FC<friendsProps> = (props) => {
             </Placeholder>
           )}
 
-          {rules && items.length <= 0 && (
+          {rules && items && items.length <= 0 && (
             <Placeholder icon={<Icon56ArchiveOutline />}>
               {getLangKey('friends_not_found_placeholder')}
             </Placeholder>
           )}
 
           {rules &&
+            items &&
             items.length > 0 &&
-            friends.items.map(({ id, first_name, last_name, photo_100 }) => {
+            items.map(({ id, first_name, last_name, photo_100 }) => {
               return (
                 <SimpleCell
                   key={id}

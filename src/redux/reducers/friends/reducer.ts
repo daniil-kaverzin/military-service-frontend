@@ -2,24 +2,24 @@ import { ofType, unionize, UnionOf } from 'unionize';
 
 import { unionizeConfig } from '../../config';
 
+export interface FriendItem {
+  id: number;
+  first_name: string;
+  last_name: string;
+  photo_100: string;
+}
+
 export interface Friends {
-  fetched: boolean;
   loading: boolean;
   rules: boolean;
-  items: Array<{
-    id: number;
-    first_name: string;
-    last_name: string;
-    photo_100: string;
-  }>;
+  items?: Array<FriendItem>;
 }
 
 export const friendsActions = unionize(
   {
     setFriendsLoading: ofType<Friends['loading']>(),
     setRules: ofType<Friends['rules']>(),
-    setFriends: ofType<Friends['items']>(),
-    setFriendsFetched: ofType<Friends['fetched']>(),
+    setFriends: ofType<Array<FriendItem>>(),
   },
   unionizeConfig,
 );
@@ -27,10 +27,9 @@ export const friendsActions = unionize(
 export type FriendsAction = UnionOf<typeof friendsActions>;
 
 const initialState: Friends = {
-  fetched: false,
   loading: true,
   rules: false,
-  items: [],
+  items: undefined,
 };
 
 export const friendsReducer = (state: Friends = initialState, action: FriendsAction) => {
@@ -46,13 +45,6 @@ export const friendsReducer = (state: Friends = initialState, action: FriendsAct
       return {
         ...state,
         rules,
-      };
-    },
-
-    setFriendsFetched: (fetched) => {
-      return {
-        ...state,
-        fetched,
       };
     },
 
