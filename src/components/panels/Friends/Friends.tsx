@@ -65,8 +65,6 @@ export const Friends: FC<friendsProps> = (props) => {
     <Panel {...props} className="friends">
       <PanelHeader separator={!isMobile}>{getLangKey('friends_header')}</PanelHeader>
 
-      {activeFriend.loading && <ScreenSpinner />}
-
       {loading && (
         <Div>
           <Spinner size="large" />
@@ -110,6 +108,8 @@ export const Friends: FC<friendsProps> = (props) => {
             })}
         </Group>
       )}
+
+      {activeFriend.loading && <ScreenSpinner />}
     </Panel>
   );
 };

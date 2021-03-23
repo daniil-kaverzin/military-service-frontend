@@ -61,8 +61,6 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
         {getLangKey('owner_profile_header')}
       </PanelHeader>
 
-      {user.loading && <ScreenSpinner />}
-
       <Group>
         <Ads />
 
@@ -120,6 +118,8 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
           actions={<Button>{getLangKey('holiday_banner_button')}</Button>}
         />
       </Group>
+
+      {user.loading && <ScreenSpinner />}
     </Panel>
   );
 };
