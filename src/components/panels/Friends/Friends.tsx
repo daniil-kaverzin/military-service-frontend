@@ -1,12 +1,14 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Avatar,
   Button,
   Div,
+  Group,
   PanelHeader,
   Placeholder,
   ScreenSpinner,
+  Separator,
   SimpleCell,
   Spinner,
 } from '@vkontakte/vkui';
@@ -19,10 +21,12 @@ import { useSelector } from '../../../hooks/useSelector';
 import { fetchFriends, fetchActiveFriend } from '../../../redux/fetch';
 import { MODAL_FRIEND } from '../../../router';
 import { getParameterByName } from '../../../utils/url';
+import { useIsMobile } from '../../../hooks/useIsMobile';
 
 export interface friendsProps extends PanelProps {}
 
 export const Friends: FC<friendsProps> = (props) => {
+  const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
   const { user, friends, activeFriend } = useSelector();
   const dispatch = useDispatch();
@@ -59,50 +63,53 @@ export const Friends: FC<friendsProps> = (props) => {
 
   return (
     <Panel {...props} className="friends">
-      <PanelHeader separator={false}>{getLangKey('friends_header')}</PanelHeader>
+      <PanelHeader separator={!isMobile}>{getLangKey('friends_header')}</PanelHeader>
+
+      {activeFriend.loading && <ScreenSpinner />}
 
       {loading && (
         <Div>
-          <Spinner size="medium" />
+          <Spinner size="large" />
         </Div>
       )}
 
-      {!loading && !rules && (
-        <Placeholder
-          stretched
-          icon={<Icon56CheckShieldOutline />}
-          action={
-            <Button size="m" onClick={getFriends}>
-              {getLangKey('friends_get_rules_button')}
-            </Button>
-          }
-        >
-          {getLangKey('friends_get_rules_label')}
-        </Placeholder>
-      )}
-
-      {!loading && rules && items.length <= 0 && (
-        <Placeholder stretched icon={<Icon56ArchiveOutline />}>
-          {getLangKey('friends_not_found_placeholder')}
-        </Placeholder>
-      )}
-
-      {!loading &&
-        rules &&
-        items.length > 0 &&
-        friends.items.map(({ id, first_name, last_name, photo_100 }) => {
-          return (
-            <SimpleCell
-              key={id}
-              before={<Avatar size={48} src={photo_100} />}
-              onClick={() => getFriend(id)}
+      {!loading && (
+        <Group>
+          {!rules && (
+            <Placeholder
+              stretched
+              icon={<Icon56CheckShieldOutline />}
+              action={
+                <Button size="m" onClick={getFriends}>
+                  {getLangKey('friends_get_rules_button')}
+                </Button>
+              }
             >
-              {`${first_name} ${last_name}`}
-            </SimpleCell>
-          );
-        })}
+              {getLangKey('friends_get_rules_label')}
+            </Placeholder>
+          )}
 
-      {activeFriend.loading && <ScreenSpinner />}
+          {rules && items.length <= 0 && (
+            <Placeholder stretched icon={<Icon56ArchiveOutline />}>
+              {getLangKey('friends_not_found_placeholder')}
+            </Placeholder>
+          )}
+
+          {rules &&
+            items.length > 0 &&
+            friends.items.map(({ id, first_name, last_name, photo_100 }) => {
+              return (
+                <SimpleCell
+                  key={id}
+                  before={<Avatar size={48} src={photo_100} />}
+                  onClick={() => getFriend(id)}
+                >
+                  {`${first_name} ${last_name}`}
+                </SimpleCell>
+              );
+            })}
+        </Group>
+      )}
     </Panel>
   );
 };

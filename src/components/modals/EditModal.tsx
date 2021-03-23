@@ -29,10 +29,12 @@ import { parseDateForInput } from '../../utils/dates';
 import { useSelector } from '../../hooks/useSelector';
 import { isEmpty } from '../../utils/validation';
 import { declOfNum } from '../../utils/words';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 const nowDateForInput = parseDateForInput(new Date());
 
 export const EditModal: FC<ModalPageProps> = (props) => {
+  const isMobile = useIsMobile();
   const { user } = useSelector();
   const router = useRouter();
   const platform = usePlatform();
@@ -78,14 +80,14 @@ export const EditModal: FC<ModalPageProps> = (props) => {
         <ModalPageHeader
           left={
             <Fragment>
-              {(platform === ANDROID || platform === VKCOM) && (
+              {isMobile && (platform === ANDROID || platform === VKCOM) && (
                 <PanelHeaderClose onClick={() => router.popPage()} />
               )}
             </Fragment>
           }
           right={
             <Fragment>
-              {platform === IOS && (
+              {isMobile && platform === IOS && (
                 <PanelHeaderButton onClick={() => router.popPage()}>
                   <Icon24Dismiss />
                 </PanelHeaderButton>

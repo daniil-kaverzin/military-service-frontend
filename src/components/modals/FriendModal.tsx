@@ -24,8 +24,10 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { CustomProgress } from '../CustomProgress';
 import { Profile } from '../Profile';
 import { useSelector } from '../../hooks/useSelector';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 export const FriendModal: FC<ModalPageProps> = (props) => {
+  const isMobile = useIsMobile();
   const platform = usePlatform();
   const router = useRouter();
   const { getLangKey } = useLanguage();
@@ -39,14 +41,14 @@ export const FriendModal: FC<ModalPageProps> = (props) => {
         <ModalPageHeader
           left={
             <Fragment>
-              {(platform === ANDROID || platform === VKCOM) && (
+              {isMobile && (platform === ANDROID || platform === VKCOM) && (
                 <PanelHeaderClose onClick={() => router.popPage()} />
               )}
             </Fragment>
           }
           right={
             <Fragment>
-              {platform === IOS && (
+              {isMobile && platform === IOS && (
                 <PanelHeaderButton onClick={() => router.popPage()}>
                   <Icon24Dismiss />
                 </PanelHeaderButton>

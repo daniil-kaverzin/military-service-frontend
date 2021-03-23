@@ -16,8 +16,10 @@ import {
 
 import { useLanguage } from '../../hooks/useLanguage';
 import { parseDate, sortedHolidays } from '../../utils/dates';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 export const HolidaysModal: FC<ModalPageProps> = (props) => {
+  const isMobile = useIsMobile();
   const router = useRouter();
   const platform = usePlatform();
   const { getLangKey } = useLanguage();
@@ -30,14 +32,14 @@ export const HolidaysModal: FC<ModalPageProps> = (props) => {
         <ModalPageHeader
           left={
             <Fragment>
-              {(platform === ANDROID || platform === VKCOM) && (
+              {isMobile && (platform === ANDROID || platform === VKCOM) && (
                 <PanelHeaderClose onClick={() => router.popPage()} />
               )}
             </Fragment>
           }
           right={
             <Fragment>
-              {platform === IOS && (
+              {isMobile && platform === IOS && (
                 <PanelHeaderButton onClick={() => router.popPage()}>
                   <Icon24Dismiss />
                 </PanelHeaderButton>

@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import { ActionSheet, ActionSheetItem, ActionSheetProps } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
+import bridge from '@vkontakte/vk-bridge';
 
 import { openStoryBox } from '../../utils/storyBox';
 import { getParameterByName } from '../../utils/url';
 import { isWeb } from '../../utils/platform';
 import { useSelector } from '../../hooks/useSelector';
 import { getProgressBetweenDates } from '../../utils/dates';
-import bridge from '@vkontakte/vk-bridge';
 
-const url = `https://vk.com/app${getParameterByName('vk_app_id')}`;
+const link = `https://vk.com/app${getParameterByName('vk_app_id')}#${getParameterByName(
+  'vk_user_id',
+)}`;
 
 export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> = (props) => {
   const router = useRouter();
@@ -29,26 +31,28 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
         <ActionSheetItem
           autoclose
           onClick={() => {
-            openStoryBox(getProgressBetweenDates(user.start_date, user.years_count), url);
+            openStoryBox(getProgressBetweenDates(user.start_date, user.years_count), link);
           }}
         >
           В историю
         </ActionSheetItem>
       )}
-      <ActionSheetItem
-        autoclose
-        onClick={() => {
-          bridge.send('VKWebAppShare', { link: 'https://vk.com/app123#hello' });
-        }}
-      >
-        В сообщении
-      </ActionSheetItem>
+      {!isWeb() && (
+        <ActionSheetItem
+          autoclose
+          onClick={() => {
+            bridge.send('VKWebAppShare', { link });
+          }}
+        >
+          В сообщении
+        </ActionSheetItem>
+      )}
       <ActionSheetItem
         autoclose
         onClick={() => {
           bridge.send('VKWebAppShowWallPostBox', {
-            message: 'https://vk.com/app123#hello',
-            attachments: 'https://vk.com/app123#hello',
+            message: link,
+            attachments: link,
           });
         }}
       >

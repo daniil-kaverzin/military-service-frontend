@@ -1,5 +1,15 @@
 import { FC, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Epic, ModalRoot, ScreenSpinner, Tabbar, TabbarItem, View } from '@vkontakte/vkui';
+import {
+  Epic,
+  ModalRoot,
+  PanelHeader,
+  ScreenSpinner,
+  SplitCol,
+  SplitLayout,
+  Tabbar,
+  TabbarItem,
+  View,
+} from '@vkontakte/vkui';
 import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 import { useLocation, useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
@@ -30,8 +40,10 @@ import { FriendModal } from '../modals/FriendModal';
 import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
 import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 export const App: FC = () => {
+  const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
   const location = useLocation();
   const router = useRouter();
@@ -102,60 +114,62 @@ export const App: FC = () => {
   }, [location]);
 
   return (
-    <Fragment>
-      {user.baseLoading && <ScreenSpinner />}
+    <SplitLayout header={!user.baseLoading && <PanelHeader shadow separator={false} />}>
+      <SplitCol spaced={!isMobile}>
+        {user.baseLoading && <ScreenSpinner />}
 
-      {!user.baseLoading && user.error && <ScreenCrash onReload={init} />}
+        {!user.baseLoading && user.error && <ScreenCrash onReload={init} />}
 
-      {!user.baseLoading && !user.error && (
-        <Fragment>
-          <Epic
-            activeStory={location.getViewId()}
-            tabbar={
-              <Tabbar>
-                <TabbarItem
-                  selected={location.getPanelId() === PANEL_PROFILE}
-                  onClick={() => router.pushPage(PAGE_PROFILE)}
-                  text={getLangKey('epic_profile')}
-                >
-                  <Icon28WristWatchOutline />
-                </TabbarItem>
-                <TabbarItem
-                  selected={location.getPanelId() === PANEL_FRIENDS}
-                  onClick={() => router.pushPage(PAGE_FRIENDS)}
-                  text={getLangKey('epic_users')}
-                >
-                  <Icon28Users3Outline />
-                </TabbarItem>
-              </Tabbar>
-            }
-          >
-            <View
-              modal={renderModals}
-              popout={renderPopouts}
-              id={VIEW_MAIN}
-              activePanel={location.getViewActivePanel(VIEW_MAIN) || ''}
-              onSwipeBack={() => router.popPage()}
-              history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_MAIN)}
+        {!user.baseLoading && !user.error && (
+          <Fragment>
+            <Epic
+              activeStory={location.getViewId()}
+              tabbar={
+                <Tabbar>
+                  <TabbarItem
+                    selected={location.getPanelId() === PANEL_PROFILE}
+                    onClick={() => router.pushPage(PAGE_PROFILE)}
+                    text={getLangKey('epic_profile')}
+                  >
+                    <Icon28WristWatchOutline />
+                  </TabbarItem>
+                  <TabbarItem
+                    selected={location.getPanelId() === PANEL_FRIENDS}
+                    onClick={() => router.pushPage(PAGE_FRIENDS)}
+                    text={getLangKey('epic_users')}
+                  >
+                    <Icon28Users3Outline />
+                  </TabbarItem>
+                </Tabbar>
+              }
             >
-              <OwnerProfile
-                id={PANEL_PROFILE}
-                openPopoutSelectShareMoreRef={openPopoutSelectShareMoreRef}
-              />
-            </View>
-            <View
-              modal={renderModals}
-              popout={renderPopouts}
-              id={VIEW_EXTRA}
-              activePanel={location.getViewActivePanel(VIEW_EXTRA) || ''}
-              onSwipeBack={() => router.popPage()}
-              history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_EXTRA)}
-            >
-              <Friends id={PANEL_FRIENDS} />
-            </View>
-          </Epic>
-        </Fragment>
-      )}
-    </Fragment>
+              <View
+                modal={renderModals}
+                popout={renderPopouts}
+                id={VIEW_MAIN}
+                activePanel={location.getViewActivePanel(VIEW_MAIN) || ''}
+                onSwipeBack={() => router.popPage()}
+                history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_MAIN)}
+              >
+                <OwnerProfile
+                  id={PANEL_PROFILE}
+                  openPopoutSelectShareMoreRef={openPopoutSelectShareMoreRef}
+                />
+              </View>
+              <View
+                modal={renderModals}
+                popout={renderPopouts}
+                id={VIEW_EXTRA}
+                activePanel={location.getViewActivePanel(VIEW_EXTRA) || ''}
+                onSwipeBack={() => router.popPage()}
+                history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_EXTRA)}
+              >
+                <Friends id={PANEL_FRIENDS} />
+              </View>
+            </Epic>
+          </Fragment>
+        )}
+      </SplitCol>
+    </SplitLayout>
   );
 };

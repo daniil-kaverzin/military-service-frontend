@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'TT Commons';
+  font-weight: 800;
+  src: url(../fonts/TT_Commons_DemiBold.woff2);
+}
+
 :root {
   --custom_progress: #818c99;
 }
