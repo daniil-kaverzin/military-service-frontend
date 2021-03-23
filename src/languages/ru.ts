@@ -33,7 +33,7 @@ export const pack = {
   modal_friend_progress_after: 'Ваш товарищ уже отслужил!',
   modal_friend_is_private: 'Таймер вашего товарища приватный',
 
-  modal_holidays_header: 'Воинские праздники',
+  modal_holidays_header: 'Праздники',
 
   word_year: ['год', 'года', 'лет'],
   word_day: ['день', 'дня', 'дней'],
