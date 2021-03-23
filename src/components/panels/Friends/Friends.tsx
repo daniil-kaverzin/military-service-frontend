@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Avatar,
@@ -8,7 +8,6 @@ import {
   PanelHeader,
   Placeholder,
   ScreenSpinner,
-  Separator,
   SimpleCell,
   Spinner,
 } from '@vkontakte/vkui';
@@ -75,7 +74,6 @@ export const Friends: FC<friendsProps> = (props) => {
         <Group>
           {!rules && (
             <Placeholder
-              stretched
               icon={<Icon56CheckShieldOutline />}
               action={
                 <Button size="m" onClick={getFriends}>
@@ -88,7 +86,7 @@ export const Friends: FC<friendsProps> = (props) => {
           )}
 
           {rules && items.length <= 0 && (
-            <Placeholder stretched icon={<Icon56ArchiveOutline />}>
+            <Placeholder icon={<Icon56ArchiveOutline />}>
               {getLangKey('friends_not_found_placeholder')}
             </Placeholder>
           )}

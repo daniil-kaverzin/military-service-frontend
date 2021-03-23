@@ -41,6 +41,7 @@ import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
 import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { Nav } from '../Nav';
 
 export const App: FC = () => {
   const isMobile = useIsMobile();
@@ -115,7 +116,7 @@ export const App: FC = () => {
 
   return (
     <SplitLayout header={!user.baseLoading && <PanelHeader shadow separator={false} />}>
-      <SplitCol spaced={!isMobile}>
+      <SplitCol width="100%" spaced={!isMobile}>
         {user.baseLoading && <ScreenSpinner />}
 
         {!user.baseLoading && user.error && <ScreenCrash onReload={init} />}
@@ -125,22 +126,24 @@ export const App: FC = () => {
             <Epic
               activeStory={location.getViewId()}
               tabbar={
-                <Tabbar>
-                  <TabbarItem
-                    selected={location.getPanelId() === PANEL_PROFILE}
-                    onClick={() => router.pushPage(PAGE_PROFILE)}
-                    text={getLangKey('epic_profile')}
-                  >
-                    <Icon28WristWatchOutline />
-                  </TabbarItem>
-                  <TabbarItem
-                    selected={location.getPanelId() === PANEL_FRIENDS}
-                    onClick={() => router.pushPage(PAGE_FRIENDS)}
-                    text={getLangKey('epic_users')}
-                  >
-                    <Icon28Users3Outline />
-                  </TabbarItem>
-                </Tabbar>
+                isMobile && (
+                  <Tabbar>
+                    <TabbarItem
+                      selected={location.getPanelId() === PANEL_PROFILE}
+                      onClick={() => router.pushPage(PAGE_PROFILE)}
+                      text={getLangKey('epic_profile')}
+                    >
+                      <Icon28WristWatchOutline />
+                    </TabbarItem>
+                    <TabbarItem
+                      selected={location.getPanelId() === PANEL_FRIENDS}
+                      onClick={() => router.pushPage(PAGE_FRIENDS)}
+                      text={getLangKey('epic_users')}
+                    >
+                      <Icon28Users3Outline />
+                    </TabbarItem>
+                  </Tabbar>
+                )
               }
             >
               <View
@@ -170,6 +173,11 @@ export const App: FC = () => {
           </Fragment>
         )}
       </SplitCol>
+      {!isMobile && !user.baseLoading && !user.error && (
+        <SplitCol fixed width="280px" minWidth="280px" maxWidth="280px" style={{ marginRight: 16 }}>
+          <Nav />
+        </SplitCol>
+      )}
     </SplitLayout>
   );
 };

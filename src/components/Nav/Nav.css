@@ -1,0 +1,4 @@
+.Nav__selected {
+  background-color: var(--button_secondary_background);
+  border-radius: 8px;
+}
