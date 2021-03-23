@@ -1,3 +1,7 @@
+.App--desktop .Panel__in {
+  padding-bottom: 0;
+}
+
 .App__nav {
   margin-right: 16px;
 }

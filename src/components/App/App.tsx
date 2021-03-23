@@ -9,6 +9,7 @@ import {
   Tabbar,
   TabbarItem,
   View,
+  classNames,
 } from '@vkontakte/vkui';
 import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 import { useLocation, useRouter } from '@happysanta/router';
@@ -116,7 +117,7 @@ export const App: FC = () => {
 
   return (
     <SplitLayout
-      className="App"
+      className={classNames('App', !isMobile && 'App--desktop')}
       header={!user.baseLoading && !user.error && <PanelHeader shadow separator={false} />}
     >
       <SplitCol width="100%" spaced={!isMobile}>
