@@ -105,8 +105,8 @@ export const fetchFriends = (app_id: number): ThunkAction<void, State, unknown, 
     } finally {
       dispatch(friendsActions.setFriendsLoading(false));
     }
-  } catch (statusCode) {
-    String(statusCode)[0] === '5' && dispatch(userActions.setError(true));
+  } catch (error) {
+    error.error_data.error_code === 1 && dispatch(userActions.setError(true));
   } finally {
     dispatch(friendsActions.setFriendsLoading(false));
   }
