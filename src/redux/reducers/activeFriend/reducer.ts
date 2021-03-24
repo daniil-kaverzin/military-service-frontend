@@ -2,24 +2,27 @@ import { ofType, unionize, UnionOf } from 'unionize';
 
 import { unionizeConfig } from '../../config';
 
+export interface FriendInfo {
+  id: number;
+  first_name: string;
+  last_name: string;
+  photo_200: string;
+  start_date?: string;
+  years_count?: number;
+  private: boolean;
+}
+
 export interface Friend {
   loading: boolean;
-  info: {
-    id: number;
-    first_name: string;
-    last_name: string;
-    photo_200: string;
-    start_date?: string;
-    years_count?: number;
-    private: boolean;
-  };
+  info: FriendInfo;
+  dictionary: { [id: number]: FriendInfo };
 }
 
 export const activeFriendActions = unionize(
   {
     setLoading: ofType<Friend['loading']>(),
-    startActiveFriend: ofType(),
-    setActiveFriend: ofType<Partial<Friend['info']>>(),
+    setActiveFriend: ofType<FriendInfo>(),
+    setNewFriend: ofType<Partial<FriendInfo> & { id: FriendInfo['id'] }>(),
   },
   unionizeConfig,
 );
@@ -37,6 +40,7 @@ const initialState: Friend = {
     years_count: undefined,
     private: true,
   },
+  dictionary: {},
 };
 
 export const activeFriendReducer = (state: Friend = initialState, action: ActiveFriendAction) => {
@@ -48,7 +52,22 @@ export const activeFriendReducer = (state: Friend = initialState, action: Active
       };
     },
 
-    setActiveFriend: (info) => ({ ...state, info: { ...state.info, ...info } }),
+    setNewFriend: (info) => {
+      return {
+        ...state,
+        info: {
+          ...state.dictionary[info.id],
+          ...info,
+        },
+        dictionary: {
+          ...state.dictionary,
+          [info.id]: {
+            ...state.dictionary[info.id],
+            ...info,
+          },
+        },
+      };
+    },
 
     default: () => state,
   });

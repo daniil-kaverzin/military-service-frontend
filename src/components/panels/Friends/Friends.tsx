@@ -43,9 +43,7 @@ export const Friends: FC<PanelProps> = (props) => {
   }, [items, getFriends]);
 
   const getFriend = (id: number) => {
-    if (activeFriend.info.id !== id) {
-      dispatch(fetchActiveFriend(String(user.access_token), id));
-    }
+    dispatch(fetchActiveFriend(String(user.access_token), id));
 
     setShowModal(true);
   };
