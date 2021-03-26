@@ -1,4 +1,4 @@
-import { LaunchParams } from '../../../types/launchParams';
+import { LaunchParams } from '@/types/launchParams';
 
 const initialLaunchParams: Partial<LaunchParams> = {
   accessTokenSettings: [],

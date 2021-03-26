@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 import { noop } from '@vkontakte/vkjs';
 
-import { pack } from '../../../languages/ru';
+import { pack } from '@/languages/ru';
 
 type LanguageDictionaryType = typeof pack;
 

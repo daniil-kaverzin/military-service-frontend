@@ -20,11 +20,11 @@ import {
   VKCOM,
 } from '@vkontakte/vkui';
 
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useSelector } from '@/hooks/useSelector';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { CustomProgress } from '../CustomProgress';
 import { Profile } from '../Profile';
-import { useSelector } from '../../hooks/useSelector';
-import { useIsMobile } from '../../hooks/useIsMobile';
 
 export const FriendModal: FC<ModalPageProps> = (props) => {
   const isMobile = useIsMobile();

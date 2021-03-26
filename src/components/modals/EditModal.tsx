@@ -22,14 +22,14 @@ import {
 import { Icon24Dismiss } from '@vkontakte/icons';
 import { useDispatch } from 'react-redux';
 
-import { useLanguage } from '../../hooks/useLanguage';
-import { fetchNewData } from '../../redux/fetch';
-import { useInput } from '../../hooks/useInput';
-import { parseDateForInput } from '../../utils/dates';
-import { useSelector } from '../../hooks/useSelector';
-import { isEmpty } from '../../utils/validation';
-import { declOfNum } from '../../utils/words';
-import { useIsMobile } from '../../hooks/useIsMobile';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useInput } from '@/hooks/useInput';
+import { useSelector } from '@/hooks/useSelector';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { fetchNewData } from '@/redux/fetch';
+import { parseDateForInput } from '@/utils/dates';
+import { isEmpty } from '@/utils/validation';
+import { declOfNum } from '@/utils/words';
 
 const nowDateForInput = parseDateForInput(new Date());
 

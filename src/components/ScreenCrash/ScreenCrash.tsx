@@ -2,7 +2,7 @@ import React, { FC, MouseEvent } from 'react';
 import { Button, Group, Panel, Placeholder, Root, View } from '@vkontakte/vkui';
 import { Icon56ErrorOutline } from '@vkontakte/icons';
 
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export interface ScreenCrashProps {
   onReload?: (event: MouseEvent) => void;

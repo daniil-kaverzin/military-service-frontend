@@ -6,7 +6,6 @@ import 'core-js/features/object';
 import ReactDOM from 'react-dom';
 import { ConfigProvider, AdaptivityProvider, AppRoot as VKUIAppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import bridge from '@vkontakte/vk-bridge';
 
 import './css/index.css';
 import { RouterProvider } from './router';

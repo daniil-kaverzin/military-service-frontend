@@ -14,9 +14,9 @@ import {
   PanelHeaderClose,
 } from '@vkontakte/vkui';
 
-import { useLanguage } from '../../hooks/useLanguage';
-import { parseDate, sortedHolidays } from '../../utils/dates';
-import { useIsMobile } from '../../hooks/useIsMobile';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { parseDate, sortedHolidays } from '@/utils/dates';
 
 export const HolidaysModal: FC<ModalPageProps> = (props) => {
   const isMobile = useIsMobile();

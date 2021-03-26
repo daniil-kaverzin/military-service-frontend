@@ -15,11 +15,11 @@ import { Icon56ArchiveOutline, Icon56CheckShieldOutline } from '@vkontakte/icons
 import { useRouter } from '@happysanta/router';
 import { useDispatch } from 'react-redux';
 
-import { useLanguage } from '../../../hooks/useLanguage';
-import { useSelector } from '../../../hooks/useSelector';
-import { fetchFriends, fetchActiveFriend } from '../../../redux/fetch';
-import { MODAL_FRIEND } from '../../../router';
-import { useIsMobile } from '../../../hooks/useIsMobile';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useSelector } from '@/hooks/useSelector';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { fetchFriends, fetchActiveFriend } from '@/redux/fetch';
+import { MODAL_FRIEND } from '@/router';
 
 export const Friends: FC<PanelProps> = (props) => {
   const isMobile = useIsMobile();

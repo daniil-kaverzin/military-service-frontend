@@ -21,14 +21,14 @@ import {
 import { useRouter } from '@happysanta/router';
 
 import './OwnerProfile.css';
-import { useLanguage } from '../../../hooks/useLanguage';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useSelector } from '@/hooks/useSelector';
+import { getHoliday, parseDate } from '@/utils/dates';
+import { MODAL_EDIT, MODAL_HOLIDAYS, POPOUT_SELECT_SHARE_MODE } from '@/router';
 import { Profile } from '../../Profile';
 import { CustomProgress } from '../../CustomProgress';
-import { useSelector } from '../../../hooks/useSelector';
-import { MODAL_EDIT, MODAL_HOLIDAYS, POPOUT_SELECT_SHARE_MODE } from '../../../router';
-import { getHoliday, parseDate } from '../../../utils/dates';
 import { Ads } from '../../Ads';
-import { useIsMobile } from '../../../hooks/useIsMobile';
 
 export interface OwnerProfileProps extends PanelProps {
   openPopoutSelectShareMoreRef?: Ref<HTMLElement>;

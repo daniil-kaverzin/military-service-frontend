@@ -2,21 +2,21 @@ import { FC, Fragment, useEffect } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import { Div, Group, PanelHeader, Placeholder, Spinner } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
-
-import { useLanguage } from '../../../hooks/useLanguage';
-import { useIsMobile } from '../../../hooks/useIsMobile';
-import { Profile } from '../../Profile';
-import { Ads } from '../../Ads';
-import { CustomProgress } from '../../CustomProgress';
-import { useDispatch } from 'react-redux';
-import { fetchActiveFriend } from '../../../redux/fetch';
-import { useSelector } from '../../../hooks/useSelector';
 import {
   Icon56BlockOutline,
   Icon56EventOutline,
   Icon56RecentOutline,
   Icon56Stars3Outline,
 } from '@vkontakte/icons';
+import { useDispatch } from 'react-redux';
+
+import { useLanguage } from '@/hooks/useLanguage';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useSelector } from '@/hooks/useSelector';
+import { fetchActiveFriend } from '@/redux/fetch';
+import { Profile } from '../../Profile';
+import { Ads } from '../../Ads';
+import { CustomProgress } from '../../CustomProgress';
 
 export const Shared: FC<PanelProps> = (props) => {
   const isMobile = useIsMobile();

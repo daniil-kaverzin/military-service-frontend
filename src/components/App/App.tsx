@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { Icon28WristWatchOutline, Icon28Users3Outline } from '@vkontakte/icons';
 
 import './App.css';
-import { useLanguage } from '../../hooks/useLanguage';
+import { useLanguage } from '@/hooks/useLanguage';
 import { OwnerProfile } from '../panels/OwnerProfile';
 import { Friends } from '../panels/Friends';
 import {
@@ -34,19 +34,19 @@ import {
   POPOUT_SELECT_SHARE_MODE,
   VIEW_SHARED,
   PANEL_SHARED,
-} from '../../router';
-import { blacked } from '../../utils/colors';
+} from '@/router';
+import { blacked } from '@/utils/colors';
 import { ScreenCrash } from '../ScreenCrash';
-import { useSelector } from '../../hooks/useSelector';
-import { fetchUser } from '../../redux/fetch';
+import { useSelector } from '@/hooks/useSelector';
+import { fetchUser } from '@/redux/fetch';
 import { FriendModal } from '../modals/FriendModal';
 import { EditModal } from '../modals/EditModal';
 import { HolidaysModal } from '../modals/HolidaysModal';
 import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
-import { useIsMobile } from '../../hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { Nav } from '../Nav';
 import { Shared } from '../panels/Shared';
-import { appActions } from '../../redux/reducers/app';
+import { appActions } from '@/redux/reducers/app';
 
 export const App: FC = () => {
   const isMobile = useIsMobile();

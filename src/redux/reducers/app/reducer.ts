@@ -8,6 +8,7 @@ export interface App {
   error: boolean;
   promoBannerProps: PromoBannerProps | null;
   idFromHash?: number;
+  isWeb: boolean;
 }
 
 export const appActions = unionize(
@@ -26,6 +27,7 @@ const initialState: App = {
   error: false,
   promoBannerProps: null,
   idFromHash: undefined,
+  isWeb: false,
 };
 
 export function appReducer(state: App = initialState, action: AppActions) {

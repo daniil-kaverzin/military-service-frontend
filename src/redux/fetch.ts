@@ -8,14 +8,13 @@ import { userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
-import { isWeb } from '../utils/platform';
 import { App, appActions } from './reducers/app';
 
 export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (
   dispatch,
   selector,
 ) => {
-  const { launchParams } = selector();
+  const { app, launchParams } = selector();
 
   try {
     const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
@@ -27,7 +26,7 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
 
     let promoBannerProps: App['promoBannerProps'] = null;
 
-    if (!isWeb()) {
+    if (!app.isWeb) {
       //@ts-ignore
       promoBannerProps = await bridge.send('VKWebAppGetAds');
       dispatch(appActions.setPromoBannerProps(promoBannerProps));

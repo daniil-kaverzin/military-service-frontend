@@ -31,11 +31,14 @@ class AppRoot extends PureComponent<AppRootProps, AppRootState> {
       router.replacePage(PAGE_SHARED);
     }
 
+    const isWeb = /web/gi.test(launchParamsDictionary.platform);
+
     this.store = createReduxStore({
       launchParams: launchParamsDictionary,
       app: {
         ...this.store.getState().app,
         idFromHash: userIdFromHashIsValid ? userIdFromHash : undefined,
+        isWeb,
       },
     });
   }

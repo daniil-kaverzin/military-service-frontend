@@ -2,9 +2,9 @@ import { Text, Div, Progress as VKProgress, Title, classNames } from '@vkontakte
 import { FC, Fragment, HTMLAttributes, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import './CustomProgress.css';
-import { getDateParts, parseDateToUnix } from '../../utils/dates';
-import { declOfNum } from '../../utils/words';
-import { useLanguage } from '../../hooks/useLanguage';
+import { getDateParts, parseDateToUnix } from '@/utils/dates';
+import { declOfNum } from '@/utils/words';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export interface CustomProgressProps extends HTMLAttributes<HTMLDivElement> {
   dateStart: Date;

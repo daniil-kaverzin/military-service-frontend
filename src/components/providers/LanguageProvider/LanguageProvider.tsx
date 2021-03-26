@@ -1,7 +1,7 @@
 import { FC, useMemo, useState } from 'react';
 
 import { LanguageContext, LanguageContextValue } from './LanguageContext';
-import { pack } from '../../../languages/ru';
+import { pack } from '@/languages/ru';
 
 export const LanguageProvider: FC = ({ children }) => {
   const [keys, setKeys] = useState(pack);

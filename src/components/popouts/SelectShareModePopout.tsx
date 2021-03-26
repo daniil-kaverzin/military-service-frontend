@@ -1,21 +1,19 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { ActionSheet, ActionSheetItem, ActionSheetProps } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 
-import { openStoryBox } from '../../utils/storyBox';
-import { getParameterByName } from '../../utils/url';
-import { isWeb } from '../../utils/platform';
-import { useSelector } from '../../hooks/useSelector';
-import { getProgressBetweenDates } from '../../utils/dates';
-
-const link = `https://vk.com/app${getParameterByName('vk_app_id')}#${getParameterByName(
-  'vk_user_id',
-)}`;
+import { openStoryBox } from '@/utils/storyBox';
+import { useSelector } from '@/hooks/useSelector';
+import { getProgressBetweenDates } from '@/utils/dates';
 
 export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> = (props) => {
   const router = useRouter();
-  const { user } = useSelector();
+  const { app, user, launchParams } = useSelector();
+
+  const link = useMemo(() => {
+    return `https://vk.com/app${launchParams.appId}#${user.id}`;
+  }, [user, launchParams]);
 
   return (
     <ActionSheet
@@ -27,7 +25,7 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
         </ActionSheetItem>
       }
     >
-      {!isWeb() && (
+      {!app.isWeb && (
         <ActionSheetItem
           autoclose
           onClick={() => {
@@ -37,7 +35,7 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
           В историю
         </ActionSheetItem>
       )}
-      {!isWeb() && (
+      {!app.isWeb && (
         <ActionSheetItem
           autoclose
           onClick={() => {

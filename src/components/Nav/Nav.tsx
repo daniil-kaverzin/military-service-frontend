@@ -4,8 +4,8 @@ import { Icon28Users3Outline, Icon28WristWatchOutline } from '@vkontakte/icons';
 import { Cell, classNames, Group, Panel, PanelHeader } from '@vkontakte/vkui';
 
 import './Nav.css';
-import { useLanguage } from '../../hooks/useLanguage';
-import { PAGE_FRIENDS, PAGE_PROFILE, PANEL_FRIENDS, PANEL_PROFILE } from '../../router';
+import { useLanguage } from '@/hooks/useLanguage';
+import { PAGE_FRIENDS, PAGE_PROFILE, PANEL_FRIENDS, PANEL_PROFILE } from '@/router';
 
 export const Nav: FC = () => {
   const router = useRouter();
