@@ -22,6 +22,10 @@ export const pack = {
   friends_not_found_placeholder: 'Кажется, никого нет',
 
   shared_header: 'Таймер',
+  shared_progress_undefined: 'Этот пользователь ещё не выбрал дату начала и срок службы',
+  shared_progress_before: 'Служба этого пользователя ещё не началась!',
+  shared_progress_after: 'Этот пользователь уже отслужил!',
+  shared_is_private: 'Таймер этого пользователя приватный',
 
   modal_edit_header: 'Редактирование',
   modal_edit_start_date_top: 'Дата начала службы',
@@ -30,7 +34,7 @@ export const pack = {
   modal_edit_private: 'Приватный таймер',
 
   modal_friend_header: 'Служба товарища',
-  modal_friend_progress_undefined: 'Ваш товарищ еще не выбрал дату начала и срок службы',
+  modal_friend_progress_undefined: 'Ваш товарищ ещё не выбрал дату начала и срок службы',
   modal_friend_progress_before: 'Служба вашего товарища ещё не началась!',
   modal_friend_progress_after: 'Ваш товарищ уже отслужил!',
   modal_friend_is_private: 'Таймер вашего товарища приватный',

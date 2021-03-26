@@ -49,7 +49,7 @@ export const Shared: FC<PanelProps> = (props) => {
             />
             {activeFriend.info.private && (
               <Placeholder icon={<Icon56BlockOutline />}>
-                Таймер этого пользователя приватный
+                {getLangKey('shared_is_private')}
               </Placeholder>
             )}
             {!activeFriend.info.private && (
@@ -61,19 +61,19 @@ export const Shared: FC<PanelProps> = (props) => {
                     friend
                     before={
                       <Placeholder icon={<Icon56RecentOutline />}>
-                        Служба этого пользователя ещё не началась
+                        {getLangKey('shared_progress_before')}
                       </Placeholder>
                     }
                     after={
                       <Placeholder icon={<Icon56Stars3Outline />}>
-                        Этот пользователь уже отслужил
+                        {getLangKey('shared_progress_after')}
                       </Placeholder>
                     }
                   />
                 )}
                 {(!activeFriend.info.start_date || !activeFriend.info.years_count) && (
                   <Placeholder icon={<Icon56EventOutline />}>
-                    Этот пользователь ещё не выбрал дату начала и срок службы
+                    {getLangKey('shared_progress_undefined')}
                   </Placeholder>
                 )}
               </Fragment>
