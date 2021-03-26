@@ -4,29 +4,33 @@ import 'core-js/features/promise';
 import 'core-js/features/symbol';
 import 'core-js/features/object';
 import ReactDOM from 'react-dom';
-import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
+import { ConfigProvider, AdaptivityProvider, AppRoot as VKUIAppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import { Provider as StoreProvider } from 'react-redux';
+import bridge from '@vkontakte/vk-bridge';
 
 import './css/index.css';
 import { RouterProvider } from './router';
-import { LanguageProvider } from './components/providers/LanguageProvider';
-import { App } from './components/App';
-import { store } from './redux/createStore';
+import { AppRootWithRouter } from './components/AppRoot';
+import { getLaunchParams } from './utils/launchParams';
 
-ReactDOM.render(
-  <StoreProvider store={store}>
+bridge.send('VKWebAppInit');
+
+window.onload = () => {
+  const launchParamsString = window.location.search.slice(1);
+  const launchParamsDictionary = getLaunchParams(launchParamsString);
+
+  require('eruda').init();
+
+  ReactDOM.render(
     <RouterProvider>
       <ConfigProvider>
         <AdaptivityProvider>
-          <LanguageProvider>
-            <AppRoot>
-              <App />
-            </AppRoot>
-          </LanguageProvider>
+          <VKUIAppRoot>
+            <AppRootWithRouter launchParamsDictionary={launchParamsDictionary} />
+          </VKUIAppRoot>
         </AdaptivityProvider>
       </ConfigProvider>
-    </RouterProvider>
-  </StoreProvider>,
-  document.getElementById('root'),
-);
+    </RouterProvider>,
+    document.getElementById('root'),
+  );
+};

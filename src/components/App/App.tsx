@@ -32,6 +32,8 @@ import {
   VIEW_MAIN,
   MODAL_HOLIDAYS,
   POPOUT_SELECT_SHARE_MODE,
+  VIEW_SHARED,
+  PANEL_SHARED,
 } from '../../router';
 import { userActions } from '../../redux/reducers/user';
 import { blacked } from '../../utils/colors';
@@ -44,6 +46,7 @@ import { HolidaysModal } from '../modals/HolidaysModal';
 import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { Nav } from '../Nav';
+import { Shared } from '../panels/Shared';
 
 export const App: FC = () => {
   const isMobile = useIsMobile();
@@ -70,8 +73,6 @@ export const App: FC = () => {
         document.body.setAttribute('scheme', localScheme);
       }
     });
-
-    bridge.send('VKWebAppInit');
 
     init();
   }, [init]);
@@ -149,6 +150,16 @@ export const App: FC = () => {
               )
             }
           >
+            <View
+              modal={renderModals}
+              popout={renderPopouts}
+              id={VIEW_SHARED}
+              activePanel={location.getViewActivePanel(VIEW_SHARED) || ''}
+              onSwipeBack={() => router.popPage()}
+              history={location.hasOverlay() ? [] : location.getViewHistory(VIEW_SHARED)}
+            >
+              <Shared id={PANEL_SHARED} />
+            </View>
             <View
               modal={renderModals}
               popout={renderPopouts}

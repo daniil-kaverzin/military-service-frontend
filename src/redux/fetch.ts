@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import { Action } from 'redux';
 import bridge from '@vkontakte/vk-bridge';
 
-import { State } from './createStore';
+import { ReduxState } from './types';
 import { activeFriendActions } from './reducers/activeFriend';
 import { User, userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
@@ -10,7 +10,7 @@ import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
 import { isWeb } from '../utils/platform';
 
-export const fetchUser = (): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
+export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
   try {
     const user = await bridge.send('VKWebAppGetUserInfo');
 
@@ -43,7 +43,7 @@ export const fetchNewData = (
   start_date: string,
   years_count: number,
   isPrivate: boolean,
-): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
+): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
   try {
     dispatch(userActions.setUserLoading(true));
 
@@ -59,9 +59,9 @@ export const fetchNewData = (
   }
 };
 
-export const fetchFriends = (app_id: number): ThunkAction<void, State, unknown, Action> => async (
-  dispatch,
-) => {
+export const fetchFriends = (
+  app_id: number,
+): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
   try {
     dispatch(friendsActions.setFriendsLoading(true));
 
@@ -114,7 +114,7 @@ export const fetchFriends = (app_id: number): ThunkAction<void, State, unknown, 
 export const fetchActiveFriend = (
   access_token: string,
   user_id: number,
-): ThunkAction<void, State, unknown, Action> => async (dispatch, selector) => {
+): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
   try {
     const { activeFriend } = selector();
 
