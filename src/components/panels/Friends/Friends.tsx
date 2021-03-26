@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
 import {
   Avatar,
@@ -19,31 +19,28 @@ import { useLanguage } from '../../../hooks/useLanguage';
 import { useSelector } from '../../../hooks/useSelector';
 import { fetchFriends, fetchActiveFriend } from '../../../redux/fetch';
 import { MODAL_FRIEND } from '../../../router';
-import { getParameterByName } from '../../../utils/url';
 import { useIsMobile } from '../../../hooks/useIsMobile';
 
 export const Friends: FC<PanelProps> = (props) => {
   const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
-  const { user, friends, activeFriend } = useSelector();
+  const { friends, activeFriend } = useSelector();
   const dispatch = useDispatch();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
 
-  const app_id = useMemo(() => getParameterByName('vk_app_id'), []);
-
   const { loading, rules, items } = friends;
 
   const getFriends = useCallback(() => {
-    app_id && dispatch(fetchFriends(Number(app_id)));
-  }, [dispatch, app_id]);
+    dispatch(fetchFriends());
+  }, [dispatch]);
 
   useEffect(() => {
     !items && getFriends();
   }, [items, getFriends]);
 
   const getFriend = (id: number) => {
-    dispatch(fetchActiveFriend(String(user.access_token), id));
+    dispatch(fetchActiveFriend(id));
 
     setShowModal(true);
   };

@@ -6,8 +6,10 @@ import { friendsReducer } from './reducers/friends';
 import { activeFriendReducer } from './reducers/activeFriend';
 import { launchParamsReducer } from './reducers/launchParams';
 import { ReduxState } from './types';
+import { appReducer } from './reducers/app';
 
 const reducers = combineReducers<ReduxState>({
+  app: appReducer,
   user: userReducer,
   friends: friendsReducer,
   activeFriend: activeFriendReducer,

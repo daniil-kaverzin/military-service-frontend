@@ -32,7 +32,7 @@ export type ActiveFriendAction = UnionOf<typeof activeFriendActions>;
 const initialState: Friend = {
   loading: false,
   info: {
-    id: -1,
+    id: 0,
     first_name: 'Имя',
     last_name: 'Фамилия',
     photo_200: '',

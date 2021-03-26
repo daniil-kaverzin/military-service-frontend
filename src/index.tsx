@@ -13,8 +13,6 @@ import { RouterProvider } from './router';
 import { AppRootWithRouter } from './components/AppRoot';
 import { getLaunchParams } from './utils/launchParams';
 
-bridge.send('VKWebAppInit');
-
 window.onload = () => {
   const launchParamsString = window.location.search.slice(1);
   const launchParamsDictionary = getLaunchParams(launchParamsString);

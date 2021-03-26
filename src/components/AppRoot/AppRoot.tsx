@@ -23,15 +23,21 @@ class AppRoot extends PureComponent<AppRootProps, AppRootState> {
 
     const { launchParamsDictionary, router } = this.props;
 
-    this.store = createReduxStore({
-      launchParams: launchParamsDictionary,
-    });
+    const userIdFromHash = Number(router.startHash.replace('#', ''));
 
-    const sharedId = Number(router.startHash.replace('#', ''));
+    const userIdFromHashIsValid = userIdFromHash && !isNaN(userIdFromHash);
 
-    if (sharedId && !isNaN(sharedId)) {
+    if (userIdFromHashIsValid) {
       router.replacePage(PAGE_SHARED);
     }
+
+    this.store = createReduxStore({
+      launchParams: launchParamsDictionary,
+      app: {
+        ...this.store.getState().app,
+        idFromHash: userIdFromHashIsValid ? userIdFromHash : undefined,
+      },
+    });
   }
 
   render() {

@@ -4,21 +4,33 @@ import bridge from '@vkontakte/vk-bridge';
 
 import { ReduxState } from './types';
 import { activeFriendActions } from './reducers/activeFriend';
-import { User, userActions } from './reducers/user';
+import { userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
 import { isWeb } from '../utils/platform';
+import { App, appActions } from './reducers/app';
 
-export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
+export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (
+  dispatch,
+  selector,
+) => {
+  const { launchParams } = selector();
+
   try {
+    const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
+      app_id: launchParams.appId || 0,
+      scope: '',
+    });
+
     const user = await bridge.send('VKWebAppGetUserInfo');
 
-    let promoBannerProps: User['promoBannerProps'] = undefined;
+    let promoBannerProps: App['promoBannerProps'] = null;
 
     if (!isWeb()) {
       //@ts-ignore
       promoBannerProps = await bridge.send('VKWebAppGetAds');
+      dispatch(appActions.setPromoBannerProps(promoBannerProps));
     }
 
     const { start_date, years_count, private: isPrivate } = await sendRequest('register.php');
@@ -29,13 +41,13 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
         start_date: start_date ? String(start_date) : undefined,
         years_count: years_count ? Number(years_count) : undefined,
         private: Boolean(Number(isPrivate)),
-        promoBannerProps,
+        access_token,
       }),
     );
   } catch {
-    dispatch(userActions.setError(true));
+    dispatch(appActions.setError(true));
   } finally {
-    dispatch(userActions.setBaseLoading(false));
+    dispatch(appActions.setBaseLoading(false));
   }
 };
 
@@ -53,20 +65,23 @@ export const fetchNewData = (
 
     dispatch(userActions.setUser({ start_date, years_count, private: isPrivate }));
   } catch {
-    dispatch(userActions.setError(true));
+    dispatch(appActions.setError(true));
   } finally {
     dispatch(userActions.setUserLoading(false));
   }
 };
 
-export const fetchFriends = (
-  app_id: number,
-): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
+export const fetchFriends = (): ThunkAction<void, ReduxState, unknown, Action> => async (
+  dispatch,
+  selector,
+) => {
+  const { launchParams } = selector();
+
   try {
     dispatch(friendsActions.setFriendsLoading(true));
 
     const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
-      app_id,
+      app_id: launchParams.appId || 0,
       scope: 'friends',
     });
 
@@ -100,23 +115,22 @@ export const fetchFriends = (
         dispatch(friendsActions.setFriends(friends));
       }
     } catch {
-      dispatch(userActions.setError(true));
+      dispatch(appActions.setError(true));
     } finally {
       dispatch(friendsActions.setFriendsLoading(false));
     }
   } catch (error) {
-    error.error_data.error_code === 1 && dispatch(userActions.setError(true));
+    error.error_data.error_code === 1 && dispatch(appActions.setError(true));
   } finally {
     dispatch(friendsActions.setFriendsLoading(false));
   }
 };
 
 export const fetchActiveFriend = (
-  access_token: string,
   user_id: number,
 ): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
   try {
-    const { activeFriend } = selector();
+    const { activeFriend, user } = selector();
 
     if (user_id in activeFriend.dictionary) {
       dispatch(
@@ -133,7 +147,7 @@ export const fetchActiveFriend = (
           v: '5.130',
           user_ids: user_id,
           fields: 'photo_200',
-          access_token,
+          access_token: user.access_token,
         },
       });
 
@@ -157,7 +171,7 @@ export const fetchActiveFriend = (
   } catch (statusCode) {
     String(statusCode)[0] === '4'
       ? dispatch(activeFriendActions.setNewFriend({ id: user_id, private: true }))
-      : dispatch(userActions.setError(true));
+      : dispatch(appActions.setError(true));
   } finally {
     dispatch(activeFriendActions.setLoading(false));
   }

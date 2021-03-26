@@ -35,7 +35,6 @@ import {
   VIEW_SHARED,
   PANEL_SHARED,
 } from '../../router';
-import { userActions } from '../../redux/reducers/user';
 import { blacked } from '../../utils/colors';
 import { ScreenCrash } from '../ScreenCrash';
 import { useSelector } from '../../hooks/useSelector';
@@ -47,19 +46,21 @@ import { SelectShareModePopout } from '../popouts/SelectShareModePopout';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { Nav } from '../Nav';
 import { Shared } from '../panels/Shared';
+import { appActions } from '../../redux/reducers/app';
 
 export const App: FC = () => {
   const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
   const location = useLocation();
   const router = useRouter();
-  const { user } = useSelector();
+  const { app } = useSelector();
   const dispatch = useDispatch();
   const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
   const openPopoutSelectShareMoreRef = useRef<HTMLElement | null>(null);
 
   const init = useCallback(async () => {
-    dispatch(userActions.setError(false));
+    dispatch(appActions.setError(false));
+
     dispatch(fetchUser());
   }, [dispatch]);
 
@@ -74,6 +75,8 @@ export const App: FC = () => {
       }
     });
 
+    bridge.send('VKWebAppInit');
+
     init();
   }, [init]);
 
@@ -87,13 +90,13 @@ export const App: FC = () => {
         bridge.send('VKWebAppSetViewSettings', {
           status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
           action_bar_color:
-            location.hasOverlay() && !user.error && !user.baseLoading
+            location.hasOverlay() && !app.error && !app.baseLoading
               ? blacked(actionBarColor, 0.4)
               : actionBarColor,
         });
       }
     }
-  }, [location, scheme, user.error, user.baseLoading]);
+  }, [location, scheme, app]);
 
   const renderModals = useMemo(() => {
     return (
@@ -119,14 +122,14 @@ export const App: FC = () => {
   return (
     <SplitLayout
       className={classNames('App', !isMobile && 'App--desktop')}
-      header={!user.baseLoading && !user.error && <PanelHeader shadow separator={false} />}
+      header={!app.baseLoading && !app.error && <PanelHeader shadow separator={false} />}
     >
       <SplitCol width="100%" spaced={!isMobile}>
-        {user.baseLoading && <ScreenSpinner />}
+        {app.baseLoading && <ScreenSpinner />}
 
-        {!user.baseLoading && user.error && <ScreenCrash onReload={init} />}
+        {!app.baseLoading && app.error && <ScreenCrash onReload={init} />}
 
-        {!user.baseLoading && !user.error && (
+        {!app.baseLoading && !app.error && (
           <Epic
             activeStory={location.getViewId()}
             tabbar={
@@ -186,7 +189,7 @@ export const App: FC = () => {
           </Epic>
         )}
       </SplitCol>
-      {!isMobile && !user.baseLoading && !user.error && (
+      {!isMobile && !app.baseLoading && !app.error && (
         <SplitCol className="App__nav" fixed width="280px" minWidth="280px" maxWidth="280px">
           <Nav />
         </SplitCol>

@@ -3,18 +3,18 @@ import { PromoBanner } from '@vkontakte/vkui';
 import { useDispatch } from 'react-redux';
 
 import { useSelector } from '../../hooks/useSelector';
-import { userActions } from '../../redux/reducers/user';
+import { appActions } from '../../redux/reducers/app';
 
 export const Ads: FC = () => {
-  const { user } = useSelector();
+  const { app } = useSelector();
   const dispatch = useDispatch();
 
   return (
     <Fragment>
-      {user.promoBannerProps && (
+      {app.promoBannerProps && (
         <PromoBanner
-          onClose={() => dispatch(userActions.setUser({ promoBannerProps: undefined }))}
-          bannerData={user.promoBannerProps}
+          onClose={() => dispatch(appActions.setPromoBannerProps(null))}
+          bannerData={app.promoBannerProps}
         />
       )}
     </Fragment>
