@@ -16,7 +16,7 @@ window.onload = () => {
   const launchParamsString = window.location.search.slice(1);
   const launchParamsDictionary = getLaunchParams(launchParamsString);
 
-  require('eruda').init();
+  // require('eruda').init();
 
   ReactDOM.render(
     <RouterProvider>
