@@ -1,22 +1,27 @@
 import { Dictionary } from '@vkontakte/vkjs';
 
-export const sendRequest = (url: string): Promise<Dictionary<any>> => {
+export const sendRequest = (
+  url: string,
+  method?: 'GET' | 'POST',
+  body?: object,
+): Promise<Dictionary<any>> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://lkptman.ru/api/military-service/methods/' + url);
+    xhr.open(method || 'GET', 'https://lkptman.ru/projects/military-service/public/api' + url);
     xhr.setRequestHeader('x-launch-params', window.location.href);
-    xhr.send();
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(body));
 
     xhr.onload = () => {
       if (String(xhr.status)[0] === '2') {
         resolve(JSON.parse(xhr.response));
       } else {
-        reject(xhr.status);
+        reject();
       }
     };
 
     xhr.onerror = () => {
-      reject(xhr.status);
+      reject();
     };
   });
 };

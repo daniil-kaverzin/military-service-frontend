@@ -41,7 +41,7 @@ export const Shared: FC<PanelProps> = (props) => {
             <Spinner size="large" />
           </Div>
         )}
-        {!activeFriend.loading && Boolean(activeFriend.info.id) && (
+        {!activeFriend.loading && !!activeFriend.info.id && (
           <Fragment>
             <Profile
               name={`${activeFriend.info.first_name} ${activeFriend.info.last_name}`}

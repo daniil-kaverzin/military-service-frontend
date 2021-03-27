@@ -14,14 +14,9 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
   dispatch,
   selector,
 ) => {
-  const { app, launchParams } = selector();
+  const { app } = selector();
 
   try {
-    const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
-      app_id: launchParams.appId || 0,
-      scope: '',
-    });
-
     const user = await bridge.send('VKWebAppGetUserInfo');
 
     let promoBannerProps: App['promoBannerProps'] = null;
@@ -32,15 +27,14 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
       dispatch(appActions.setPromoBannerProps(promoBannerProps));
     }
 
-    const { start_date, years_count, private: isPrivate } = await sendRequest('register.php');
+    const { start_date, years_count, private: isPrivate } = await sendRequest('/user/create');
 
     dispatch(
       userActions.setUser({
         ...user,
         start_date: start_date ? String(start_date) : undefined,
         years_count: years_count ? Number(years_count) : undefined,
-        private: Boolean(Number(isPrivate)),
-        access_token,
+        private: Boolean(isPrivate),
       }),
     );
   } catch {
@@ -60,11 +54,11 @@ export const fetchNewData = (
   try {
     dispatch(userActions.setUserLoading(true));
 
-    await sendRequest(
-      `changeData.php?start_date=${start_date || ''}&years_count=${
-        years_count || ''
-      }&private=${isPrivate}`,
-    );
+    await sendRequest('/user', 'POST', {
+      private: isPrivate,
+      start_date,
+      years_count,
+    });
 
     dispatch(
       userActions.setUser({
@@ -139,7 +133,7 @@ export const fetchActiveFriend = (
   user_id: number,
 ): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
   try {
-    const { activeFriend, user } = selector();
+    const { activeFriend } = selector();
 
     if (user_id in activeFriend.dictionary) {
       dispatch(
@@ -150,37 +144,18 @@ export const fetchActiveFriend = (
     } else {
       dispatch(activeFriendActions.setLoading(true));
 
-      const { response: friend } = await bridge.send('VKWebAppCallAPIMethod', {
-        method: 'users.get',
-        params: {
-          v: '5.130',
-          user_ids: user_id,
-          fields: 'photo_200',
-          access_token: user.access_token,
-        },
-      });
+      const userResponse = await sendRequest(`/user/${user_id}`);
 
       dispatch(
         activeFriendActions.setNewFriend({
-          ...friend[0],
-        }),
-      );
-
-      const { start_date, years_count } = await sendRequest(`getUserById.php?id=${user_id}`);
-
-      dispatch(
-        activeFriendActions.setNewFriend({
+          ...userResponse,
           id: user_id,
-          start_date,
-          years_count,
-          private: false,
+          private: Boolean(userResponse.private),
         }),
       );
     }
-  } catch (statusCode) {
-    String(statusCode)[0] === '4'
-      ? dispatch(activeFriendActions.setNewFriend({ id: user_id, private: true }))
-      : dispatch(appActions.setError(true));
+  } catch {
+    dispatch(appActions.setError(true));
   } finally {
     dispatch(activeFriendActions.setLoading(false));
   }
