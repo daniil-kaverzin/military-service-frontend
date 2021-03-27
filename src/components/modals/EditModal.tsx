@@ -67,7 +67,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
     if (isEmpty(date.value)) {
       setDateError(true);
     } else {
-      dispatch(fetchNewData(date.value, Number(years.value), isPrivate));
+      dispatch(fetchNewData(isPrivate, date.value, Number(years.value)));
       router.popPage();
     }
   };

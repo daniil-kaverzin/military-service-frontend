@@ -27,6 +27,11 @@ export const pack = {
   shared_progress_after: 'Этот пользователь уже отслужил!',
   shared_is_private: 'Таймер этого пользователя приватный',
 
+  alert_share_cancel: 'Отмена',
+  alert_share_ok: 'Хорошо',
+  alert_share_header: 'Предупреждение',
+  alert_share_text: 'После того, как вы поделитесь — ваш таймер станет публичным!',
+
   modal_edit_header: 'Редактирование',
   modal_edit_start_date_top: 'Дата начала службы',
   modal_edit_years: 'Длительность службы',

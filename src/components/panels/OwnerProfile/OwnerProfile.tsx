@@ -25,7 +25,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useSelector } from '@/hooks/useSelector';
 import { getHoliday, parseDate } from '@/utils/dates';
-import { MODAL_EDIT, MODAL_HOLIDAYS, POPOUT_SELECT_SHARE_MODE } from '@/router';
+import { MODAL_EDIT, MODAL_HOLIDAYS, POPOUT_SELECT_SHARE_MODE, POPOUT_SHARE_ALERT } from '@/router';
 import { Profile } from '../../Profile';
 import { CustomProgress } from '../../CustomProgress';
 import { Ads } from '../../Ads';
@@ -99,7 +99,9 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
             mode="secondary"
             size="l"
             stretched
-            onClick={() => router.pushPopup(POPOUT_SELECT_SHARE_MODE)}
+            onClick={() =>
+              router.pushPopup(user.private ? POPOUT_SHARE_ALERT : POPOUT_SELECT_SHARE_MODE)
+            }
             getRootRef={openPopoutSelectShareMoreRef}
           >
             {getLangKey('owner_profile_button_share')}

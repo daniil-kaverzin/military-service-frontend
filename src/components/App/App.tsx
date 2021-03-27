@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Epic,
   ModalRoot,
@@ -34,6 +34,7 @@ import {
   POPOUT_SELECT_SHARE_MODE,
   VIEW_SHARED,
   PANEL_SHARED,
+  POPOUT_SHARE_ALERT,
 } from '@/router';
 import { blacked } from '@/utils/colors';
 import { ScreenCrash } from '../ScreenCrash';
@@ -47,6 +48,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { Nav } from '../Nav';
 import { Shared } from '../panels/Shared';
 import { appActions } from '@/redux/reducers/app';
+import { ShareAlert } from '../popouts/ShareAlert';
 
 export const App: FC = () => {
   const isMobile = useIsMobile();
@@ -114,6 +116,8 @@ export const App: FC = () => {
         return (
           <SelectShareModePopout toggleRef={openPopoutSelectShareMoreRef.current as Element} />
         );
+      case POPOUT_SHARE_ALERT:
+        return <ShareAlert />;
       default:
         return undefined;
     }

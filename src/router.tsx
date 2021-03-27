@@ -17,6 +17,7 @@ export const MODAL_EDIT = 'modal_edit';
 export const MODAL_FRIEND = 'modal_friend';
 export const MODAL_HOLIDAYS = 'modal_holidays';
 
+export const POPOUT_SHARE_ALERT = 'popout_share_alert';
 export const POPOUT_SELECT_SHARE_MODE = 'popout_select_share_mode';
 
 const routes = {

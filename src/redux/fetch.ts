@@ -51,18 +51,28 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
 };
 
 export const fetchNewData = (
-  start_date: string,
-  years_count: number,
   isPrivate: boolean,
-): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
+  start_date?: string,
+  years_count?: number,
+): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
+  const { user } = selector();
+
   try {
     dispatch(userActions.setUserLoading(true));
 
     await sendRequest(
-      `changeData.php?start_date=${start_date}&years_count=${years_count}&private=${isPrivate}`,
+      `changeData.php?start_date=${start_date || ''}&years_count=${
+        years_count || ''
+      }&private=${isPrivate}`,
     );
 
-    dispatch(userActions.setUser({ start_date, years_count, private: isPrivate }));
+    dispatch(
+      userActions.setUser({
+        start_date: start_date || user.start_date,
+        years_count: years_count || user.years_count,
+        private: isPrivate,
+      }),
+    );
   } catch {
     dispatch(appActions.setError(true));
   } finally {
