@@ -31,19 +31,18 @@ export const Friends: FC<PanelProps> = (props) => {
 
   const { loading, rules, items } = friends;
 
-  const getFriends = useCallback(() => {
-    dispatch(fetchFriends());
-  }, [dispatch]);
-
   useEffect(() => {
-    !items && getFriends();
-  }, [items, getFriends]);
+    !items && dispatch(fetchFriends(true));
+  }, [items, dispatch]);
 
-  const getFriend = (id: number) => {
-    dispatch(fetchActiveFriend(id));
+  const getFriend = useCallback(
+    (id: number) => {
+      dispatch(fetchActiveFriend(id));
 
-    setShowModal(true);
-  };
+      setShowModal(true);
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (showModal && !activeFriend.loading) {
@@ -69,7 +68,7 @@ export const Friends: FC<PanelProps> = (props) => {
             <Placeholder
               icon={<Icon56CheckShieldOutline />}
               action={
-                <Button size="m" onClick={getFriends}>
+                <Button size="m" onClick={() => dispatch(fetchFriends())}>
                   {getLangKey('friends_get_rules_button')}
                 </Button>
               }

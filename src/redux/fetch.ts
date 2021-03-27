@@ -74,19 +74,23 @@ export const fetchNewData = (
   }
 };
 
-export const fetchFriends = (): ThunkAction<void, ReduxState, unknown, Action> => async (
-  dispatch,
-  selector,
-) => {
+export const fetchFriends = (
+  hasAccess?: boolean,
+): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
   const { launchParams } = selector();
 
   try {
-    dispatch(friendsActions.setFriendsLoading(true));
+    if (hasAccess && !launchParams.accessTokenSettings?.includes('friends')) {
+      dispatch(friendsActions.setFriendsLoading(false));
+      return;
+    }
 
     const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
       app_id: launchParams.appId || 0,
       scope: 'friends',
     });
+
+    dispatch(friendsActions.setFriendsLoading(true));
 
     dispatch(userActions.setToken(access_token));
     dispatch(friendsActions.setRules(true));
