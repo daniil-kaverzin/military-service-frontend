@@ -8,11 +8,13 @@ import { openStoryBox } from '@/utils/storyBox';
 import { useSelector } from '@/hooks/useSelector';
 import { getProgressBetweenDates } from '@/utils/dates';
 import { fetchNewData } from '@/redux/fetch';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> = (props) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { app, user, launchParams } = useSelector();
+  const { getLangKey } = useLanguage();
 
   const link = useMemo(() => {
     return `https://vk.com/app${launchParams.appId}#${user.id}`;
@@ -24,13 +26,13 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
 
   const showStoryBox = useCallback(() => {
     openStoryBox(
-      'Срочная служба',
+      getLangKey('app_title'),
       getProgressBetweenDates(user.start_date, user.years_count),
       link,
     ).then(() => {
       setUserIsPublic();
     });
-  }, [setUserIsPublic, user, link]);
+  }, [getLangKey, setUserIsPublic, user, link]);
 
   const showWallPostBox = useCallback(() => {
     bridge
@@ -51,22 +53,22 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
       onClose={() => router.popPage()}
       iosCloseItem={
         <ActionSheetItem autoclose mode="cancel">
-          Отменить
+          {getLangKey('action_sheet_share_cancel')}
         </ActionSheetItem>
       }
     >
       {!app.isWeb && (
         <ActionSheetItem autoclose onClick={showStoryBox}>
-          В историю
+          {getLangKey('action_sheet_share_story')}
         </ActionSheetItem>
       )}
       {!app.isWeb && (
         <ActionSheetItem autoclose onClick={share}>
-          В сообщении
+          {getLangKey('action_sheet_share_message')}
         </ActionSheetItem>
       )}
       <ActionSheetItem autoclose onClick={showWallPostBox}>
-        На стену
+        {getLangKey('action_sheet_share_wall')}
       </ActionSheetItem>
     </ActionSheet>
   );

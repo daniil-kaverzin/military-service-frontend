@@ -1,4 +1,6 @@
 export const pack = {
+  app_title: 'Срочная служба',
+
   epic_profile: 'Моя служба',
   epic_users: 'Товарищи',
 
@@ -31,6 +33,11 @@ export const pack = {
   alert_share_ok: 'Хорошо',
   alert_share_header: 'Предупреждение',
   alert_share_text: 'После того, как вы поделитесь — ваш таймер станет публичным!',
+
+  action_sheet_share_story: 'В историю',
+  action_sheet_share_message: 'В сообщении',
+  action_sheet_share_wall: 'На стену',
+  action_sheet_share_cancel: 'Отменить',
 
   modal_edit_header: 'Редактирование',
   modal_edit_start_date_top: 'Дата начала службы',
