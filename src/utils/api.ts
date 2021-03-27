@@ -1,13 +1,13 @@
 import { Dictionary } from '@vkontakte/vkjs';
 
 export const sendRequest = (
-  url: string,
+  urn: string,
   method?: 'GET' | 'POST',
   body?: object,
 ): Promise<Dictionary<any>> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open(method || 'GET', 'https://lkptman.ru/projects/military-service/public/api' + url);
+    xhr.open(method || 'GET', 'https://lkptman.online/api' + urn);
     xhr.setRequestHeader('x-launch-params', window.location.href);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(body));
