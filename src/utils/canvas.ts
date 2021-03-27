@@ -56,11 +56,11 @@ const changeColor = async (
   return localCanvas.toDataURL();
 };
 
-export const generateProgress = async (value: number, progressColor: string) => {
+export const generateProgress = async (title: string, value: number, progressColor: string) => {
   const wrapperCanvas = document.createElement('canvas');
   const wrapperContext = wrapperCanvas.getContext('2d')!;
   wrapperCanvas.width = 1200;
-  wrapperCanvas.height = 500;
+  wrapperCanvas.height = 800;
 
   const progressCanvas = document.createElement('canvas');
   const progressContext = progressCanvas.getContext('2d')!;
@@ -70,10 +70,10 @@ export const generateProgress = async (value: number, progressColor: string) => 
   const percent = (wrapperCanvas.width - 200) / 100;
 
   wrapperContext.fillStyle = '#ffffff';
-  roundRect(wrapperContext, 0, 0, wrapperCanvas.width - 0, 490, 60);
+  roundRect(wrapperContext, 0, 200, wrapperCanvas.width - 0, 490, 60);
 
   progressContext.fillStyle = '#e2e3e6';
-  roundRect(progressContext, 100, 250, wrapperCanvas.width - 200, 140, 30);
+  roundRect(progressContext, 100, 450, wrapperCanvas.width - 200, 140, 30);
 
   wrapperContext.drawImage(await loadImage(progressCanvas.toDataURL()), 0, 0);
 
@@ -93,7 +93,9 @@ export const generateProgress = async (value: number, progressColor: string) => 
   wrapperContext.font = 'bold 128px arial';
   wrapperContext.fillStyle = progressColor;
   wrapperContext.textAlign = 'center';
-  wrapperContext.fillText(`${value}%`, wrapperCanvas.width / 2, 200);
+  wrapperContext.fillText(`${value}%`, wrapperCanvas.width / 2, 400);
+
+  wrapperContext.fillText(title, wrapperCanvas.width / 2, 125);
 
   return {
     image: wrapperCanvas.toDataURL(),

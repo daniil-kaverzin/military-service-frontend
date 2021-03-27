@@ -23,7 +23,11 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
   }, [user, dispatch]);
 
   const showStoryBox = useCallback(() => {
-    openStoryBox(getProgressBetweenDates(user.start_date, user.years_count), link).then(() => {
+    openStoryBox(
+      'Срочная служба',
+      getProgressBetweenDates(user.start_date, user.years_count),
+      link,
+    ).then(() => {
       setUserIsPublic();
     });
   }, [setUserIsPublic, user, link]);
