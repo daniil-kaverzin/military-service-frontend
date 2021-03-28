@@ -126,7 +126,7 @@ export const App: FC = () => {
   return (
     <SplitLayout
       className={classNames('App', !isMobile && 'App--desktop')}
-      header={!app.baseLoading && !app.error && <PanelHeader shadow separator={false} />}
+      header={!isMobile && !app.baseLoading && !app.error && <PanelHeader shadow separator={false} />}
     >
       <SplitCol width="100%" spaced={!isMobile}>
         {app.baseLoading && <ScreenSpinner />}
