@@ -1,55 +1,21 @@
-import { FC, Fragment } from 'react';
+import { FC, memo } from 'react';
 import { useRouter } from '@happysanta/router';
-import { Icon24Dismiss } from '@vkontakte/icons';
-import {
-  ANDROID,
-  IOS,
-  ModalPage,
-  ModalPageProps,
-  ModalPageHeader,
-  PanelHeaderButton,
-  SimpleCell,
-  usePlatform,
-  VKCOM,
-  PanelHeaderClose,
-} from '@vkontakte/vkui';
+import { ModalPage, ModalPageProps, SimpleCell } from '@vkontakte/vkui';
 
 import { useLanguage } from '@/hooks/useLanguage';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { parseDate, sortedHolidays } from '@/utils/dates';
+import { CustomModalPageHeader } from '../vkuiOverrides/CustomModalPageHeader';
 
-export const HolidaysModal: FC<ModalPageProps> = (props) => {
-  const isMobile = useIsMobile();
+export const HolidaysModal: FC<ModalPageProps> = memo((props) => {
   const router = useRouter();
-  const platform = usePlatform();
+
   const { getLangKey } = useLanguage();
 
   return (
     <ModalPage
       {...props}
       onClose={() => router.popPage()}
-      header={
-        <ModalPageHeader
-          left={
-            <Fragment>
-              {isMobile && (platform === ANDROID || platform === VKCOM) && (
-                <PanelHeaderClose onClick={() => router.popPage()} />
-              )}
-            </Fragment>
-          }
-          right={
-            <Fragment>
-              {isMobile && platform === IOS && (
-                <PanelHeaderButton onClick={() => router.popPage()}>
-                  <Icon24Dismiss />
-                </PanelHeaderButton>
-              )}
-            </Fragment>
-          }
-        >
-          {getLangKey('modal_holidays_header')}
-        </ModalPageHeader>
-      }
+      header={<CustomModalPageHeader>{getLangKey('modal_holidays_header')}</CustomModalPageHeader>}
       dynamicContentHeight
     >
       {sortedHolidays.map((holiday) => {
@@ -66,4 +32,4 @@ export const HolidaysModal: FC<ModalPageProps> = (props) => {
       })}
     </ModalPage>
   );
-};
+});

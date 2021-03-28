@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react';
+import { FC, memo, MouseEvent } from 'react';
 import { Button, Group, Panel, Placeholder, Root, View } from '@vkontakte/vkui';
 import { Icon56ErrorOutline } from '@vkontakte/icons';
 
@@ -8,7 +8,7 @@ export interface ScreenCrashProps {
   onReload?: (event: MouseEvent) => void;
 }
 
-export const ScreenCrash: FC<ScreenCrashProps> = ({ onReload }) => {
+export const ScreenCrash: FC<ScreenCrashProps> = memo(({ onReload }) => {
   const { getLangKey } = useLanguage();
 
   return (
@@ -28,4 +28,4 @@ export const ScreenCrash: FC<ScreenCrashProps> = ({ onReload }) => {
       </View>
     </Root>
   );
-};
+});

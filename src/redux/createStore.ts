@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 
 import { userReducer } from './reducers/user';
 import { friendsReducer } from './reducers/friends';
-import { activeFriendReducer } from './reducers/activeFriend';
+import { activeUserReducer } from './reducers/activeUser';
 import { launchParamsReducer } from './reducers/launchParams';
 import { ReduxState } from './types';
 import { appReducer } from './reducers/app';
@@ -12,7 +12,7 @@ const reducers = combineReducers<ReduxState>({
   app: appReducer,
   user: userReducer,
   friends: friendsReducer,
-  activeFriend: activeFriendReducer,
+  activeUser: activeUserReducer,
   launchParams: launchParamsReducer,
 });
 

@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Epic,
   ModalRoot,
@@ -51,18 +51,22 @@ import { appActions } from '@/redux/reducers/app';
 import { ShareAlert } from '../popouts/ShareAlert';
 
 export const App: FC = () => {
+  const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
+
   const isMobile = useIsMobile();
+
   const { getLangKey } = useLanguage();
+
   const location = useLocation();
   const router = useRouter();
+
   const { app } = useSelector();
   const dispatch = useDispatch();
-  const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
+
   const openPopoutSelectShareMoreRef = useRef<HTMLElement | null>(null);
 
   const init = useCallback(async () => {
     dispatch(appActions.setError(false));
-
     dispatch(fetchUser());
   }, [dispatch]);
 
@@ -126,7 +130,9 @@ export const App: FC = () => {
   return (
     <SplitLayout
       className={classNames('App', !isMobile && 'App--desktop')}
-      header={!isMobile && !app.baseLoading && !app.error && <PanelHeader shadow separator={false} />}
+      header={
+        !isMobile && !app.baseLoading && !app.error && <PanelHeader shadow separator={false} />
+      }
     >
       <SplitCol width="100%" spaced={!isMobile}>
         {app.baseLoading && <ScreenSpinner />}
@@ -193,6 +199,7 @@ export const App: FC = () => {
           </Epic>
         )}
       </SplitCol>
+
       {!isMobile && !app.baseLoading && !app.error && (
         <SplitCol className="App__nav" fixed width="280px" minWidth="280px" maxWidth="280px">
           <Nav />

@@ -2,7 +2,7 @@ import { ofType, unionize, UnionOf } from 'unionize';
 
 import { unionizeConfig } from '../../config';
 
-export interface FriendInfo {
+export interface UserInfo {
   id: number;
   first_name: string;
   last_name: string;
@@ -12,24 +12,23 @@ export interface FriendInfo {
   private: boolean;
 }
 
-export interface Friend {
+export interface ActiveUser {
   loading: boolean;
-  info: FriendInfo;
-  dictionary: { [id: number]: FriendInfo };
+  info: UserInfo;
+  dictionary: { [id: number]: UserInfo };
 }
 
-export const activeFriendActions = unionize(
+export const activeUserActions = unionize(
   {
-    setLoading: ofType<Friend['loading']>(),
-    setActiveFriend: ofType<FriendInfo>(),
-    setNewFriend: ofType<Partial<FriendInfo> & { id: FriendInfo['id'] }>(),
+    setLoading: ofType<ActiveUser['loading']>(),
+    setNewUser: ofType<Partial<UserInfo> & { id: UserInfo['id'] }>(),
   },
   unionizeConfig,
 );
 
-export type ActiveFriendAction = UnionOf<typeof activeFriendActions>;
+export type ActiveUserAction = UnionOf<typeof activeUserActions>;
 
-const initialState: Friend = {
+const initialState: ActiveUser = {
   loading: false,
   info: {
     id: 0,
@@ -43,8 +42,8 @@ const initialState: Friend = {
   dictionary: {},
 };
 
-export const activeFriendReducer = (state: Friend = initialState, action: ActiveFriendAction) => {
-  return activeFriendActions.match(action, {
+export const activeUserReducer = (state: ActiveUser = initialState, action: ActiveUserAction) => {
+  return activeUserActions.match(action, {
     setLoading: (loading) => {
       return {
         ...state,
@@ -52,7 +51,7 @@ export const activeFriendReducer = (state: Friend = initialState, action: Active
       };
     },
 
-    setNewFriend: (info) => {
+    setNewUser: (info) => {
       return {
         ...state,
         info: {

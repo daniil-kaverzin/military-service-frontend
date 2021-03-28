@@ -5,7 +5,6 @@ import {
   Button,
   Div,
   Group,
-  PanelHeader,
   Placeholder,
   ScreenSpinner,
   SimpleCell,
@@ -17,14 +16,13 @@ import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '@/hooks/useLanguage';
 import { useSelector } from '@/hooks/useSelector';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { fetchFriends, fetchActiveFriend } from '@/redux/fetch';
 import { MODAL_FRIEND } from '@/router';
+import { CustomPanelHeader } from '@/components/vkuiOverrides/CustomPanelHeader';
 
 export const Friends: FC<PanelProps> = (props) => {
-  const isMobile = useIsMobile();
   const { getLangKey } = useLanguage();
-  const { friends, activeFriend } = useSelector();
+  const { friends, activeUser } = useSelector();
   const dispatch = useDispatch();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -45,16 +43,16 @@ export const Friends: FC<PanelProps> = (props) => {
   );
 
   useEffect(() => {
-    if (showModal && !activeFriend.loading) {
+    if (showModal && !activeUser.loading) {
       router.pushModal(MODAL_FRIEND);
 
       setShowModal(false);
     }
-  }, [showModal, activeFriend, router]);
+  }, [showModal, activeUser, router]);
 
   return (
-    <Panel {...props} className="friends">
-      <PanelHeader separator={!isMobile}>{getLangKey('friends_header')}</PanelHeader>
+    <Panel {...props}>
+      <CustomPanelHeader>{getLangKey('friends_header')}</CustomPanelHeader>
 
       {loading && (
         <Div>
@@ -100,7 +98,7 @@ export const Friends: FC<PanelProps> = (props) => {
         </Group>
       )}
 
-      {activeFriend.loading && <ScreenSpinner />}
+      {activeUser.loading && <ScreenSpinner />}
     </Panel>
   );
 };

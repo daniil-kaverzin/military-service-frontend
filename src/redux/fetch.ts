@@ -3,7 +3,7 @@ import { Action } from 'redux';
 import bridge from '@vkontakte/vk-bridge';
 
 import { ReduxState } from './types';
-import { activeFriendActions } from './reducers/activeFriend';
+import { activeUserActions } from './reducers/activeUser';
 import { userActions } from './reducers/user';
 import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
@@ -137,21 +137,21 @@ export const fetchActiveFriend = (
   user_id: number,
 ): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch, selector) => {
   try {
-    const { activeFriend } = selector();
+    const { activeUser } = selector();
 
-    if (user_id in activeFriend.dictionary) {
+    if (user_id in activeUser.dictionary) {
       dispatch(
-        activeFriendActions.setNewFriend({
-          ...activeFriend.dictionary[user_id],
+        activeUserActions.setNewUser({
+          ...activeUser.dictionary[user_id],
         }),
       );
     } else {
-      dispatch(activeFriendActions.setLoading(true));
+      dispatch(activeUserActions.setLoading(true));
 
       const userResponse = await sendRequest(`/user/${user_id}`);
 
       dispatch(
-        activeFriendActions.setNewFriend({
+        activeUserActions.setNewUser({
           ...userResponse,
           id: user_id,
           private: Boolean(userResponse.private),
@@ -161,6 +161,6 @@ export const fetchActiveFriend = (
   } catch {
     dispatch(appActions.setError(true));
   } finally {
-    dispatch(activeFriendActions.setLoading(false));
+    dispatch(activeUserActions.setLoading(false));
   }
 };

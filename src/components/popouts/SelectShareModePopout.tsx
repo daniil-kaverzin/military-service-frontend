@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react';
+import { FC, Fragment, useCallback } from 'react';
 import { ActionSheet, ActionSheetItem, ActionSheetProps } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
@@ -16,9 +16,7 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
   const { app, user, launchParams } = useSelector();
   const { getLangKey } = useLanguage();
 
-  const link = useMemo(() => {
-    return `https://vk.com/app${launchParams.appId}#${user.id}`;
-  }, [user, launchParams]);
+  const link = `https://vk.com/app${launchParams.appId}#${user.id}`;
 
   const setUserIsPublic = useCallback(() => {
     user.private && dispatch(fetchNewData(false));
@@ -27,7 +25,7 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
   const showStoryBox = useCallback(() => {
     openStoryBox(
       getLangKey('app_title'),
-      getProgressBetweenDates(user.start_date, user.years_count),
+      getProgressBetweenDates(user.start_date, user.years_count).percents,
       link,
     ).then(() => {
       setUserIsPublic();
@@ -58,15 +56,16 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
       }
     >
       {!app.isWeb && (
-        <ActionSheetItem autoclose onClick={showStoryBox}>
-          {getLangKey('action_sheet_share_story')}
-        </ActionSheetItem>
+        <Fragment>
+          <ActionSheetItem autoclose onClick={showStoryBox}>
+            {getLangKey('action_sheet_share_story')}
+          </ActionSheetItem>
+          <ActionSheetItem autoclose onClick={share}>
+            {getLangKey('action_sheet_share_message')}
+          </ActionSheetItem>
+        </Fragment>
       )}
-      {!app.isWeb && (
-        <ActionSheetItem autoclose onClick={share}>
-          {getLangKey('action_sheet_share_message')}
-        </ActionSheetItem>
-      )}
+
       <ActionSheetItem autoclose onClick={showWallPostBox}>
         {getLangKey('action_sheet_share_wall')}
       </ActionSheetItem>

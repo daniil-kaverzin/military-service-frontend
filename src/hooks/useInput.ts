@@ -8,7 +8,7 @@ export type UseInput = [
   Dispatch<SetStateAction<string>>,
 ];
 
-export const useInput = (initialValue: string = ''): UseInput => {
+export const useInput = (initialValue = ''): UseInput => {
   const [value, setValue] = useState(initialValue);
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

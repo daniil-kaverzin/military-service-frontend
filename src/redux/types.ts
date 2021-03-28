@@ -1,5 +1,5 @@
 import { LaunchParams } from '../types/launchParams';
-import { Friend } from './reducers/activeFriend';
+import { ActiveUser } from './reducers/activeUser';
 import { App } from './reducers/app';
 import { Friends } from './reducers/friends';
 import { User } from './reducers/user';
@@ -11,6 +11,6 @@ export interface ReduxState {
   app: App;
   user: User;
   friends: Friends;
-  activeFriend: Friend;
+  activeUser: ActiveUser;
   launchParams: Partial<LaunchParams>;
 }

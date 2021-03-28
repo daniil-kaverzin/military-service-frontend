@@ -1,81 +1,48 @@
 import { FC, Fragment } from 'react';
 import { useRouter } from '@happysanta/router';
 import {
-  Icon24Dismiss,
   Icon56BlockOutline,
   Icon56EventOutline,
   Icon56RecentOutline,
   Icon56Stars3Outline,
 } from '@vkontakte/icons';
-import {
-  ANDROID,
-  IOS,
-  ModalPage,
-  ModalPageProps,
-  ModalPageHeader,
-  PanelHeaderButton,
-  PanelHeaderClose,
-  Placeholder,
-  usePlatform,
-  VKCOM,
-} from '@vkontakte/vkui';
+import { ModalPage, ModalPageProps, Placeholder } from '@vkontakte/vkui';
 
 import { useLanguage } from '@/hooks/useLanguage';
 import { useSelector } from '@/hooks/useSelector';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { CustomProgress } from '../CustomProgress';
 import { Profile } from '../Profile';
+import { CustomModalPageHeader } from '../vkuiOverrides/CustomModalPageHeader';
 
 export const FriendModal: FC<ModalPageProps> = (props) => {
-  const isMobile = useIsMobile();
-  const platform = usePlatform();
   const router = useRouter();
+
   const { getLangKey } = useLanguage();
-  const { activeFriend } = useSelector();
+  const { activeUser } = useSelector();
+
+  const name = `${activeUser.info.first_name} ${activeUser.info.last_name}`;
 
   return (
     <ModalPage
       {...props}
       onClose={() => router.popPage()}
-      header={
-        <ModalPageHeader
-          left={
-            <Fragment>
-              {isMobile && (platform === ANDROID || platform === VKCOM) && (
-                <PanelHeaderClose onClick={() => router.popPage()} />
-              )}
-            </Fragment>
-          }
-          right={
-            <Fragment>
-              {isMobile && platform === IOS && (
-                <PanelHeaderButton onClick={() => router.popPage()}>
-                  <Icon24Dismiss />
-                </PanelHeaderButton>
-              )}
-            </Fragment>
-          }
-        >
-          {getLangKey('modal_friend_header')}
-        </ModalPageHeader>
-      }
+      header={<CustomModalPageHeader>{getLangKey('modal_friend_header')}</CustomModalPageHeader>}
       dynamicContentHeight
     >
-      <Profile
-        avatar={activeFriend.info.photo_200}
-        name={`${activeFriend.info.first_name} ${activeFriend.info.last_name}`}
-      />
-      {activeFriend.info.private && (
+      <Profile avatar={activeUser.info.photo_200} name={name} />
+
+      {activeUser.info.private && (
         <Placeholder icon={<Icon56BlockOutline />}>
           {getLangKey('modal_friend_is_private')}
         </Placeholder>
       )}
-      {!activeFriend.info.private && (
+
+      {!activeUser.info.private && (
         <Fragment>
-          {activeFriend.info.start_date && activeFriend.info.years_count && (
+          {activeUser.info.start_date && activeUser.info.years_count && (
             <CustomProgress
-              dateStart={new Date(activeFriend.info.start_date)}
-              yearsCount={Number(activeFriend.info.years_count)}
+              dateStart={activeUser.info.start_date}
+              yearsCount={activeUser.info.years_count}
               before={
                 <Placeholder icon={<Icon56RecentOutline />}>
                   {getLangKey('modal_friend_progress_before')}
@@ -86,11 +53,11 @@ export const FriendModal: FC<ModalPageProps> = (props) => {
                   {getLangKey('modal_friend_progress_after')}
                 </Placeholder>
               }
-              friend
+              gray
             />
           )}
 
-          {(!activeFriend.info.start_date || !activeFriend.info.years_count) && (
+          {(!activeUser.info.start_date || !activeUser.info.years_count) && (
             <Placeholder icon={<Icon56EventOutline />}>
               {getLangKey('modal_friend_progress_undefined')}
             </Placeholder>

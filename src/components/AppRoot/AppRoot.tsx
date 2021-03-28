@@ -4,10 +4,10 @@ import { Provider as StoreProvider } from 'react-redux';
 import { RouterProps, withRouter } from '@happysanta/router';
 
 import { App } from '../App';
-import { createReduxStore } from '../../redux/createStore';
-import { LaunchParams } from '../../types/launchParams';
-import { ReduxState } from '../../redux/types';
-import { PAGE_SHARED } from '../../router';
+import { createReduxStore } from '@/redux/createStore';
+import { LaunchParams } from '@/types/launchParams';
+import { ReduxState } from '@/redux/types';
+import { PAGE_SHARED } from '@/router';
 
 export interface AppRootProps extends RouterProps {
   launchParamsDictionary: LaunchParams;

@@ -1,6 +1,6 @@
 import { FC, Fragment, useEffect } from 'react';
 import Panel, { PanelProps } from '@vkontakte/vkui/dist/components/Panel/Panel';
-import { Div, Group, PanelHeader, Placeholder, Spinner } from '@vkontakte/vkui';
+import { Div, Group, Placeholder, Spinner } from '@vkontakte/vkui';
 import { useRouter } from '@happysanta/router';
 import {
   Icon56BlockOutline,
@@ -11,16 +11,15 @@ import {
 import { useDispatch } from 'react-redux';
 
 import { useLanguage } from '@/hooks/useLanguage';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { useSelector } from '@/hooks/useSelector';
 import { fetchActiveFriend } from '@/redux/fetch';
 import { Profile } from '../../Profile';
 import { Ads } from '../../Ads';
 import { CustomProgress } from '../../CustomProgress';
+import { CustomPanelHeader } from '@/components/vkuiOverrides/CustomPanelHeader';
 
 export const Shared: FC<PanelProps> = (props) => {
-  const isMobile = useIsMobile();
-  const { app, activeFriend } = useSelector();
+  const { app, activeUser } = useSelector();
   const { getLangKey } = useLanguage();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -33,32 +32,36 @@ export const Shared: FC<PanelProps> = (props) => {
 
   return (
     <Panel {...props}>
-      <PanelHeader separator={!isMobile}>{getLangKey('shared_header')}</PanelHeader>
+      <CustomPanelHeader>{getLangKey('shared_header')}</CustomPanelHeader>
       <Group>
         <Ads />
-        {(activeFriend.loading || !activeFriend.info.id) && (
+
+        {(activeUser.loading || !activeUser.info.id) && (
           <Div>
             <Spinner size="large" />
           </Div>
         )}
-        {!activeFriend.loading && !!activeFriend.info.id && (
+
+        {!activeUser.loading && !!activeUser.info.id && (
           <Fragment>
             <Profile
-              name={`${activeFriend.info.first_name} ${activeFriend.info.last_name}`}
-              avatar={activeFriend.info.photo_200}
+              name={`${activeUser.info.first_name} ${activeUser.info.last_name}`}
+              avatar={activeUser.info.photo_200}
             />
-            {activeFriend.info.private && (
+
+            {activeUser.info.private && (
               <Placeholder icon={<Icon56BlockOutline />}>
                 {getLangKey('shared_is_private')}
               </Placeholder>
             )}
-            {!activeFriend.info.private && (
+
+            {!activeUser.info.private && (
               <Fragment>
-                {activeFriend.info.start_date && activeFriend.info.years_count && (
+                {activeUser.info.start_date && activeUser.info.years_count && (
                   <CustomProgress
-                    dateStart={new Date(activeFriend.info.start_date)}
-                    yearsCount={Number(activeFriend.info.years_count)}
-                    friend
+                    dateStart={activeUser.info.start_date}
+                    yearsCount={activeUser.info.years_count}
+                    gray
                     before={
                       <Placeholder icon={<Icon56RecentOutline />}>
                         {getLangKey('shared_progress_before')}
@@ -71,7 +74,8 @@ export const Shared: FC<PanelProps> = (props) => {
                     }
                   />
                 )}
-                {(!activeFriend.info.start_date || !activeFriend.info.years_count) && (
+
+                {(!activeUser.info.start_date || !activeUser.info.years_count) && (
                   <Placeholder icon={<Icon56EventOutline />}>
                     {getLangKey('shared_progress_undefined')}
                   </Placeholder>

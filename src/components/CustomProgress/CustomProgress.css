@@ -4,12 +4,12 @@
   align-items: center;
 }
 
-.CustomProgress--friend .CustomProgress__progressWrap *,
-.CustomProgress--friend .CustomProgress__columns * {
+.CustomProgress--gray .CustomProgress__progressWrap *,
+.CustomProgress--gray .CustomProgress__columns * {
   color: var(--custom_progress) !important;
 }
 
-.CustomProgress--friend .Progress__in {
+.CustomProgress--gray .Progress__in {
   background: var(--custom_progress) !important;
 }
 
