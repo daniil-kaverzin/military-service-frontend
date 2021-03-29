@@ -80,13 +80,13 @@ export const fetchFriends = (
   const { launchParams } = selector();
 
   try {
-    if (hasAccess && !launchParams.accessTokenSettings?.includes('friends')) {
+    if (hasAccess && !launchParams.accessTokenSettings.includes('friends')) {
       dispatch(friendsActions.setFriendsLoading(false));
       return;
     }
 
     const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
-      app_id: launchParams.appId || 0,
+      app_id: launchParams.appId,
       scope: 'friends',
     });
 

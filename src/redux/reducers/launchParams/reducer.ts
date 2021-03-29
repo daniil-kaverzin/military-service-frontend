@@ -1,6 +1,6 @@
 import { LaunchParams } from '@/types/launchParams';
 
-const initialLaunchParams: Partial<LaunchParams> = {
+const initialLaunchParams: LaunchParams = {
   accessTokenSettings: [],
   appId: 0,
   areNotificationsEnabled: false,

@@ -12,5 +12,5 @@ export interface ReduxState {
   user: User;
   friends: Friends;
   activeUser: ActiveUser;
-  launchParams: Partial<LaunchParams>;
+  launchParams: LaunchParams;
 }
