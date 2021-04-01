@@ -27,7 +27,7 @@ class AppRoot extends PureComponent<AppRootProps, AppRootState> {
 
     const userIdFromHashIsValid = userIdFromHash && !isNaN(userIdFromHash);
 
-    if (userIdFromHashIsValid) {
+    if (userIdFromHashIsValid && userIdFromHash !== Number(launchParamsDictionary.userId)) {
       router.replacePage(PAGE_SHARED);
     }
 
