@@ -7,7 +7,7 @@ export const sendRequest = (
 ): Promise<Dictionary<any>> => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open(method || 'GET', 'https://military.lkptman.ru/api' + urn);
+    xhr.open(method || 'GET', process.env.REACT_APP_API + urn);
     xhr.setRequestHeader('x-launch-params', window.location.href);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(body));

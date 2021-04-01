@@ -5,6 +5,9 @@
   "homepage": ".",
   "dependencies": {
     "@happysanta/router": "^0.1.14",
+    "@sentry/react": "^6.2.5",
+    "@sentry/tracing": "^6.2.5",
+    "@sentry/types": "^6.2.5",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.0.6",
@@ -31,7 +34,8 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "cross-env HTTPS=true react-app-rewired start",
+    "check-env": "cross-env node prebuild.js",
+    "start": "npm run check-env && cross-env HTTPS=true react-app-rewired start",
     "vk-tunnel": "vk-tunnel --node-tls-reject-unauthorized=0 --insecure=1 --http-protocol=https --ws-protocol=wss --host=localhost --port=3000",
     "build": "react-app-rewired build",
     "deploy": "vk-miniapps-deploy",
