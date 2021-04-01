@@ -3,6 +3,7 @@ import { ActionSheet, ActionSheetItem, ActionSheetProps } from '@vkontakte/vkui'
 import { useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 import { useDispatch } from 'react-redux';
+import { noop } from '@vkontakte/vkjs';
 
 import { openStoryBox } from '@/utils/storyBox';
 import { useSelector } from '@/hooks/useSelector';
@@ -27,9 +28,11 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
       getLangKey('app_title'),
       getProgressBetweenDates(user.start_date, user.years_count).percents,
       link,
-    ).then(() => {
-      setUserIsPublic();
-    });
+    )
+      .then(() => {
+        setUserIsPublic();
+      })
+      .catch(noop);
   }, [getLangKey, setUserIsPublic, user, link]);
 
   const showWallPostBox = useCallback(() => {
@@ -38,11 +41,15 @@ export const SelectShareModePopout: FC<Omit<ActionSheetProps, 'iosCloseItem'>> =
         message: link,
         attachments: link,
       })
-      .then(() => setUserIsPublic());
+      .then(() => setUserIsPublic())
+      .catch(noop);
   }, [link, setUserIsPublic]);
 
   const share = useCallback(() => {
-    bridge.send('VKWebAppShare', { link }).then(() => setUserIsPublic());
+    bridge
+      .send('VKWebAppShare', { link })
+      .then(() => setUserIsPublic())
+      .catch(noop);
   }, [link, setUserIsPublic]);
 
   return (
