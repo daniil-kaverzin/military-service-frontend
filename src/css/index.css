@@ -11,3 +11,13 @@
 body[scheme='space_gray'] {
   --custom_progress: #e1e3e6;
 }
+
+.Subhead {
+  cursor: default;
+}
+.Input__el {
+  cursor: text;
+}
+.Switch {
+  cursor: pointer;
+}
