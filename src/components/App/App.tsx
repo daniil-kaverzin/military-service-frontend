@@ -147,14 +147,18 @@ export const App: FC = () => {
                 <Tabbar>
                   <TabbarItem
                     selected={location.getPanelId() === PANEL_PROFILE}
-                    onClick={() => router.pushPage(PAGE_PROFILE)}
+                    onClick={() => {
+                      location.getPanelId() !== PANEL_PROFILE && router.pushPage(PAGE_PROFILE);
+                    }}
                     text={getLangKey('epic_profile')}
                   >
                     <Icon28WristWatchOutline />
                   </TabbarItem>
                   <TabbarItem
                     selected={location.getPanelId() === PANEL_FRIENDS}
-                    onClick={() => router.pushPage(PAGE_FRIENDS)}
+                    onClick={() => {
+                      location.getPanelId() !== PANEL_FRIENDS && router.pushPage(PAGE_FRIENDS);
+                    }}
                     text={getLangKey('epic_users')}
                   >
                     <Icon28Users3Outline />
