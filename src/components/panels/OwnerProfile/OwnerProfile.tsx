@@ -115,8 +115,11 @@ export const OwnerProfile: FC<OwnerProfileProps> = (props) => {
               ? parseDate(new Date(holiday.date), getLangKey('months'))
               : getLangKey('holiday_banner_not_holiday_description')
           }
-          onClick={() => router.pushModal(MODAL_HOLIDAYS)}
-          actions={<Button>{getLangKey('holiday_banner_button')}</Button>}
+          actions={
+            <Button onClick={() => router.pushModal(MODAL_HOLIDAYS)}>
+              {getLangKey('holiday_banner_button')}
+            </Button>
+          }
         />
       </Group>
 
