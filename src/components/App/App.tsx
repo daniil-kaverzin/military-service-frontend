@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Epic,
   ModalRoot,
@@ -11,7 +11,6 @@ import {
   View,
   classNames,
 } from '@vkontakte/vkui';
-import { AppearanceScheme } from '@vkontakte/vkui/dist/components/ConfigProvider/ConfigProviderContext';
 import { useLocation, useRouter } from '@happysanta/router';
 import bridge from '@vkontakte/vk-bridge';
 import { useDispatch } from 'react-redux';
@@ -36,7 +35,6 @@ import {
   PANEL_SHARED,
   POPOUT_SHARE_ALERT,
 } from '@/router';
-import { blacked } from '@/utils/colors';
 import { ScreenCrash } from '../ScreenCrash';
 import { useSelector } from '@/hooks/useSelector';
 import { fetchUser } from '@/redux/fetch';
@@ -51,8 +49,6 @@ import { appActions } from '@/redux/reducers/app';
 import { ShareAlert } from '../popouts/ShareAlert';
 
 export const App: FC = () => {
-  const [scheme, setScheme] = useState<AppearanceScheme | undefined>(undefined);
-
   const isMobile = useIsMobile();
 
   const { getLangKey } = useLanguage();
@@ -73,36 +69,14 @@ export const App: FC = () => {
   useEffect(() => {
     bridge.subscribe(({ detail }) => {
       if (detail.type === 'VKWebAppUpdateConfig') {
-        const localScheme = detail.data.scheme || 'bright_light';
+        const scheme = detail.data.scheme || 'bright_light';
 
-        setScheme(localScheme);
-
-        document.body.setAttribute('scheme', localScheme);
+        document.body.setAttribute('scheme', scheme);
       }
     });
 
-    bridge.send('VKWebAppInit');
-
     init();
   }, [init]);
-
-  useEffect(() => {
-    if (bridge.supports('VKWebAppSetViewSettings')) {
-      const actionBarColor = getComputedStyle(document.body)
-        .getPropertyValue('--background_content')
-        .trim();
-
-      if (scheme) {
-        bridge.send('VKWebAppSetViewSettings', {
-          status_bar_style: scheme === 'bright_light' ? 'dark' : 'light',
-          action_bar_color:
-            location.hasOverlay() && !app.error && !app.baseLoading
-              ? blacked(actionBarColor, 0.4)
-              : actionBarColor,
-        });
-      }
-    }
-  }, [location, scheme, app]);
 
   const renderModals = useMemo(() => {
     return (

@@ -6,6 +6,7 @@ import 'core-js/features/object';
 import ReactDOM from 'react-dom';
 import { ConfigProvider, AdaptivityProvider, AppRoot as VKUIAppRoot } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
+import bridge from '@vkontakte/vk-bridge';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 
@@ -19,6 +20,8 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
 });
+
+bridge.send('VKWebAppInit');
 
 window.onload = () => {
   const launchParamsString = window.location.search.slice(1);
