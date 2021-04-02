@@ -21,6 +21,6 @@ export const blacked = (target: string, opacity: number) => {
 
   return `#${[r3, g3, b3]
     .map(Math.round)
-    .map((n) => n.toString(16).padStart(2, '0'))
+    .map((n) => n.toString(16))
     .join('')}`;
 };
