@@ -10,18 +10,13 @@ import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
 import { App, appActions } from './reducers/app';
 
-export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (
-  dispatch,
-  selector,
-) => {
-  const { app } = selector();
-
+export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
   try {
     const user = await bridge.send('VKWebAppGetUserInfo');
 
     let promoBannerProps: App['promoBannerProps'] = null;
 
-    if (!app.isWeb) {
+    if (bridge.supports('VKWebAppGetAds')) {
       //@ts-ignore
       promoBannerProps = await bridge.send('VKWebAppGetAds');
       dispatch(appActions.setPromoBannerProps(promoBannerProps));
