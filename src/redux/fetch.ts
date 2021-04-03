@@ -17,7 +17,7 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
     let promoBannerProps: App['promoBannerProps'] = null;
 
     if (bridge.supports('VKWebAppGetAds')) {
-      //@ts-ignore
+      // @ts-ignore
       promoBannerProps = await bridge.send('VKWebAppGetAds');
       dispatch(appActions.setPromoBannerProps(promoBannerProps));
     }

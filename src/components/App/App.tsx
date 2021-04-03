@@ -75,6 +75,8 @@ export const App: FC = () => {
       }
     });
 
+    bridge.send('VKWebAppInit');
+
     init();
   }, [init]);
 

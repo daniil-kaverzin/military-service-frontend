@@ -21,8 +21,6 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
-bridge.send('VKWebAppInit');
-
 window.onload = () => {
   const launchParamsString = window.location.search.slice(1);
   const launchParamsDictionary = getLaunchParams(launchParamsString);
