@@ -87,10 +87,16 @@ export const fetchFriends = (
       return;
     }
 
-    const { access_token } = await bridge.send('VKWebAppGetAuthToken', {
+    const neededScop = 'friends';
+
+    const { access_token, scope } = await bridge.send('VKWebAppGetAuthToken', {
       app_id: launchParams.appId,
-      scope: 'friends',
+      scope: neededScop,
     });
+
+    if (neededScop !== scope) {
+      return;
+    }
 
     dispatch(friendsActions.setFriendsLoading(true));
 
