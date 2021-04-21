@@ -3,7 +3,6 @@
   "app_id": "7755104",
   "endpoints": {
     "mobile": "index.html",
-    "mvk": "index.html",
     "web": "index.html"
   }
 }
