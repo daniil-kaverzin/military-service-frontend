@@ -110,7 +110,7 @@ export const App: FC = () => {
         !isMobile && !app.baseLoading && !app.error && <PanelHeader shadow separator={false} />
       }
     >
-      <SplitCol width="100%" spaced={!isMobile}>
+      <SplitCol spaced={!isMobile}>
         {app.baseLoading && <ScreenSpinner />}
 
         {!app.baseLoading && app.error && <ScreenCrash onReload={init} />}
