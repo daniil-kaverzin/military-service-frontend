@@ -34,6 +34,7 @@ import {
   VIEW_SHARED,
   PANEL_SHARED,
   POPOUT_SHARE_ALERT,
+  PAGE_SHARED,
 } from '@/router';
 import { ScreenCrash } from '../ScreenCrash';
 import { useSelector } from '@/hooks/useSelector';
@@ -65,6 +66,14 @@ export const App: FC = () => {
     dispatch(appActions.setError(false));
     dispatch(fetchUser());
   }, [dispatch]);
+
+  const handleClickReload = () => {
+    if (router.getCurrentLocation().getPageId() === PAGE_SHARED && app.error) {
+      router.replacePage(PAGE_PROFILE);
+    }
+
+    init();
+  };
 
   useEffect(() => {
     bridge.subscribe(({ detail }) => {
@@ -113,7 +122,7 @@ export const App: FC = () => {
       <SplitCol spaced={!isMobile}>
         {app.baseLoading && <ScreenSpinner />}
 
-        {!app.baseLoading && app.error && <ScreenCrash onReload={init} />}
+        {!app.baseLoading && app.error && <ScreenCrash onReload={handleClickReload} />}
 
         {!app.baseLoading && !app.error && (
           <Epic
