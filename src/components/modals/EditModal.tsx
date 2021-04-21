@@ -57,7 +57,7 @@ export const EditModal: FC<ModalPageProps> = (props) => {
       yearsValue === user.years_count &&
       isPrivate === user.private
     ) {
-      router.popPage();
+      router.popPageIfHasOverlay();
       return;
     }
 
