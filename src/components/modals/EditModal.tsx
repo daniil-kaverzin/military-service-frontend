@@ -61,12 +61,29 @@ export const EditModal: FC<ModalPageProps> = (props) => {
       return;
     }
 
-    if (isEmpty(date.value)) {
-      setDateError(true);
-    } else {
+    const now = new Date();
+
+    const minDate = new Date();
+    const maxDate = new Date();
+
+    minDate.setFullYear(now.getFullYear() - 100);
+    maxDate.setFullYear(now.getFullYear() + 10);
+
+    const selectedValueUnix = new Date(date.value).getTime();
+
+    const dateIsValid =
+      !isEmpty(date.value) &&
+      selectedValueUnix > minDate.getTime() &&
+      selectedValueUnix < maxDate.getTime();
+
+    if (dateIsValid) {
       dispatch(fetchNewData(isPrivate, date.value, yearsValue));
       router.popPage();
+
+      return;
     }
+
+    setDateError(true);
   };
 
   return (

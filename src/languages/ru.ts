@@ -4,7 +4,7 @@ export const pack = {
   epic_profile: 'Моя служба',
   epic_users: 'Товарищи',
 
-  error_label_required: 'Заполните это поле',
+  error_label_required: 'Укажите реальную дату начала службы',
 
   profile_passed: 'Прошло:',
   profile_lefted: 'Осталось:',
