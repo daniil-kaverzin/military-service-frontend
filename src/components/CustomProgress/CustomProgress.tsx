@@ -54,9 +54,9 @@ export const CustomProgress: FC<CustomProgressProps> = (props) => {
     <Div {...restProps} className={classNames('CustomProgress', gray && 'CustomProgress--gray')}>
       {progress.percents < 0 && before}
 
-      {progress.percents > 100 && after}
+      {progress.percents >= 100 && after}
 
-      {progress.percents <= 100 && progress.percents >= 0 && (
+      {progress.percents < 100 && progress.percents >= 0 && (
         <Fragment>
           <div className="CustomProgress__progressWrap">
             <Title level="2" weight="semibold" className="CustomProgress__progressValue">
