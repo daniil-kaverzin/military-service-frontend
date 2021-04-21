@@ -18,9 +18,9 @@ body[scheme='space_gray'] {
 .Input__el {
   cursor: text;
 }
-.Input__el::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-}
-.Switch {
+
+.Switch,
+.Input__el::-webkit-calendar-picker-indicator,
+.Tappable .Subhead {
   cursor: pointer;
 }
