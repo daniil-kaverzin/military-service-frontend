@@ -9,6 +9,7 @@ import { friendsActions } from './reducers/friends';
 import { sendRequest } from '../utils/api';
 import { isEmpty } from '../utils/validation';
 import { App, appActions } from './reducers/app';
+import { noop } from '@vkontakte/vkjs';
 
 export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => async (dispatch) => {
   try {
@@ -17,8 +18,14 @@ export const fetchUser = (): ThunkAction<void, ReduxState, unknown, Action> => a
     let promoBannerProps: App['promoBannerProps'] = null;
 
     if (bridge.supports('VKWebAppGetAds')) {
-      // @ts-ignore
-      promoBannerProps = await bridge.send('VKWebAppGetAds');
+      await bridge
+        // @ts-ignore
+        .send('VKWebAppGetAds')
+        .then((r: any) => {
+          promoBannerProps = r;
+        })
+        .catch(noop);
+
       dispatch(appActions.setPromoBannerProps(promoBannerProps));
     }
 
