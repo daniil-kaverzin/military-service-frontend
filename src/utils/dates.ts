@@ -10,7 +10,7 @@ export const getDateParts = (allSeconds: number) => {
     days,
     hours,
     minutes,
-    seconds: ~~seconds,
+    seconds: Math.round(seconds),
   };
 };
 
